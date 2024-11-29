@@ -236,7 +236,7 @@ export function DatosAdicionalesForm({ api, setProgress }) {
             name="regimen_condominio"
             render={({ field }) => (
               <FormItem className="">
-                <FormLabel>Instalaciones existentes</FormLabel>
+                <FormLabel>Regimen en condominio</FormLabel>
                 <FormControl>
                   <RadioGroup
                     onValueChange={field.onChange}
@@ -271,7 +271,7 @@ export function DatosAdicionalesForm({ api, setProgress }) {
 
 
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-          <div className="w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
+          <div className="w-full md:w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
           <Button type="submit" className="ml-auto w-full md:w-[200px]">Finalizar y guardar</Button>
         </div>
 
