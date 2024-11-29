@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { FiPlusCircle } from "react-icons/fi";
+import { IoEyeOutline } from "react-icons/io5";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -37,67 +38,22 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-const data: Payment[] = [
+const data = [
   {
     id: "m5gr84i9",
     amount: 316,
-    status: "success",
+    status: "SF001",
     email: "ken99@yahoo.com",
   },
   {
     id: "3u1reuv4",
     amount: 242,
-    status: "success",
+    status: "SF002",
     email: "Abe45@gmail.com",
   },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
 ]
 
-export type Payment = {
-  id: string
-  amount: number
-  status: "pending" | "processing" | "success" | "failed"
-  email: string
-}
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original
-
-      return (
-        <>
-        </>
-      )
-    },
-  },
-]
 
 export function DataTableFactibilidadesUsuarios() {
   const navigate = useNavigate();
@@ -109,6 +65,31 @@ export function DataTableFactibilidadesUsuarios() {
     React.useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = React.useState({})
 
+  const columns = [
+    {
+      accessorKey: "status",
+      header: "Folio",
+      cell: ({ row }) => (
+        <div className="capitalize">{row.getValue("status")}</div>
+      ),
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original
+
+        return (
+          <>
+            <div className="flex gap-3 w-full items-center justify-end">
+              <Button>Descargar Factibilidad</Button>
+              <Button onClick={() => navigate("/factibilidadDashboard/verFactibilidad")}>Ver<IoEyeOutline /></Button>
+            </div>
+          </>
+        )
+      },
+    },
+  ]
   const table = useReactTable({
     data,
     columns,
@@ -140,7 +121,7 @@ export function DataTableFactibilidadesUsuarios() {
           className="w-[200px]"
         />
 
-        <Button onClick={() => navigate("/crearFactibilidad")} className="ml-auto">Nueva Factbilidad <FiPlusCircle/></Button>
+        <Button onClick={() => navigate("/crearFactibilidad")} className="ml-auto">Nueva Factbilidad <FiPlusCircle /></Button>
 
       </div>
       <div className="rounded-md border">

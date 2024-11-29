@@ -41,7 +41,7 @@ const formSchema = z.object({
   })
 })
 
-export function DatosAdicionalesForm({ api, setProgress }) {
+export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,7 +62,7 @@ export function DatosAdicionalesForm({ api, setProgress }) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 flex flex-col">
-        <div className="flex gap-10 flex-nowrap mb-[100px]">
+        <div className="flex gap-10 flex-wrap mb-[100px]">
           <FormField
             control={form.control}
             name="uso_suelo"
@@ -270,11 +270,15 @@ export function DatosAdicionalesForm({ api, setProgress }) {
         </div>
 
 
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
-          <div className="w-full md:w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
-          <Button type="submit" className="ml-auto w-full md:w-[200px]">Finalizar y guardar</Button>
-        </div>
-
+        {
+          disabled != true ?
+            <>
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
+                <div className="w-full md:w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
+                <Button type="submit" className="ml-auto w-full md:w-[200px]">Finalizar y guardar<FaArrowRight /></Button>
+              </div>
+            </> : <></>
+        }
       </form>
     </Form>
   )

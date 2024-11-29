@@ -7,6 +7,7 @@ import { NotFound } from './views/Layouts/NotFound';
 import { FactibilidadDashBoard } from './views/Factibilidad/FactibilidadDashBoard';
 import { CrearFactibilidad } from './views/Factibilidad/CrearFactibilidad';
 import { FactibilidadFormulario } from './views/Factibilidad/FactibilidadFormulario';
+import { VerFactibilidad } from './views/Factibilidad/VerFactibilidad';
 
 
 const router = createBrowserRouter([
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
             {
                 path: '/factibilidadFormulario',
                 element: <FactibilidadFormulario />
+            },
+            {
+                path: '/factibilidadDashboard/verFactibilidad',
+                element: <VerFactibilidad />
             },
         ]
     },

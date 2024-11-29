@@ -71,7 +71,7 @@ export function AppSidebar() {
       icon: <IoHome className={iconStlyes} />,
     },
     {
-      title: "Factibilidad",
+      title: "Mis Factibilidades",
       url: "/factibilidadDashboard",
       icon: <FaNewspaper className={iconStlyes} />,
     },
