@@ -7,7 +7,7 @@ export function getOperadores(setloading: Function, setData: Function) {
     const fectOperadores = async () => {
       try {
         setloading(true);
-        const response = await axiosClient.get('/users');
+        const response = await axiosClient.get('/users/operadores');
         setData(response?.data?.data);
       }
       catch (e) {

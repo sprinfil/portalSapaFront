@@ -23,6 +23,7 @@ import { LoaderSecondary } from '@/components/components/LoaderSecondary'
 import { login } from '@/lib/AuthService'
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast'
+import logo from "../../assets/SAPALOGO.png"
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -31,24 +32,24 @@ export const Login = () => {
   const { toast } = useToast();
 
   const formSchema = z.object({
-    username: z.string().min(2).max(50),
+    email: z.string().min(2).max(50),
     password: z.string().min(2).max(50)
   })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      email: "",
       password: "",
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      localStorage.setItem("TOKEN", 'SDFSDFSDF');
-      navigate("/dashboard");
+      // localStorage.setItem("TOKEN", 'SDFSDFSDF');
+      // navigate("/dashboard");
 
-      // await login(setLoading, values?.username, values?.password, setToken, setUser);
+      await login(setLoading, values?.email, values?.password, setToken, setUser);
     } catch (e) {
       toast({
         title: 'Ocurrio un error',
@@ -69,15 +70,15 @@ export const Login = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col">
             <FormField
               control={form.control}
-              name="username"
+              name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Nombre</FormLabel>
+                  <FormLabel>Correo</FormLabel>
                   <FormControl>
-                    <Input placeholder="username" {...field} />
+                    <Input type='email' placeholder="Correo" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Username.
+                    Correo
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -88,19 +89,19 @@ export const Login = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Contraseña</FormLabel>
                   <FormControl>
-                    <Input placeholder="password" type="password" {...field} />
+                    <Input placeholder="Contraseña" type="password" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Password.
+                    Password
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className='flex justify-between items-center'>
-              <p>No tienes cuenta? <span className='text-blue-500 hover:underline cursor-pointer'>Registrate</span> </p>
+              <p>No tienes cuenta? <span onClick={() => navigate("/register")} className='text-blue-500 hover:underline cursor-pointer'>Registrate</span> </p>
               <Button type="submit" className='ml-auto' disabled={loading}>
                 {
                   loading ?

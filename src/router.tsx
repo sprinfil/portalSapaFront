@@ -11,6 +11,8 @@ import { VerFactibilidad } from './views/Factibilidad/VerFactibilidad';
 import { Operadores } from './views/Operadores/Operadores';
 import { FactibilidadMonitor } from './views/Factibilidad/FactibilidadMonitor';
 import { VerFactibilidadMonitor } from './views/Factibilidad/VerFactibilidadMonitor';
+import { Register } from './views/Auth/Register';
+import { VerifyEmail } from './views/Auth/VerifyEmail';
 
 
 const router = createBrowserRouter([
@@ -63,6 +65,14 @@ const router = createBrowserRouter([
             {
                 path: '/login',
                 element: <Login />
+            },
+            {
+                path: '/register',
+                element: <Register />
+            },
+            {
+                path: '/verify-email',
+                element: <VerifyEmail />
             },
         ]
     },
