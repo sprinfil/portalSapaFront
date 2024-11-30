@@ -8,6 +8,9 @@ import { FactibilidadDashBoard } from './views/Factibilidad/FactibilidadDashBoar
 import { CrearFactibilidad } from './views/Factibilidad/CrearFactibilidad';
 import { FactibilidadFormulario } from './views/Factibilidad/FactibilidadFormulario';
 import { VerFactibilidad } from './views/Factibilidad/VerFactibilidad';
+import { Operadores } from './views/Operadores/Operadores';
+import { FactibilidadMonitor } from './views/Factibilidad/FactibilidadMonitor';
+import { VerFactibilidadMonitor } from './views/Factibilidad/VerFactibilidadMonitor';
 
 
 const router = createBrowserRouter([
@@ -38,6 +41,18 @@ const router = createBrowserRouter([
             {
                 path: '/factibilidadDashboard/verFactibilidad',
                 element: <VerFactibilidad />
+            },
+            {
+                path: '/Operadores',
+                element: <Operadores />
+            },
+            {
+                path: '/MonitorFactibilidades',
+                element: <FactibilidadMonitor />
+            },
+            {
+                path: '/MonitorFactibilidades/VerFactibilidad',
+                element: <VerFactibilidadMonitor />
             },
         ]
     },

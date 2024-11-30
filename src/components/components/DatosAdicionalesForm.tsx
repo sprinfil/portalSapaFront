@@ -61,7 +61,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 flex flex-col">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
         <div className="flex gap-10 flex-wrap mb-[100px]">
           <FormField
             control={form.control}

@@ -12,7 +12,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { FaUser, FaMapMarkedAlt, FaClipboardList } from "react-icons/fa";
+import { FaUser, FaMapMarkedAlt, FaClipboardList, FaUsers } from "react-icons/fa";
 import { IoHome } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdOutlineExitToApp } from "react-icons/md";
@@ -27,7 +27,9 @@ import ZustandPrincipal from "@/Zustand/ZustandPrincipal";
 import { SideBarMenuCollapsibleButton, SideBarMenuCollapsibleIcon, SideBarMenuCollapsibleIconButton } from "./SideBarMenuCollapsibleIconButton";
 import logo from "../../assets/SAPALOGO.png"
 import { FaNewspaper } from "react-icons/fa6";
-
+import { CiBoxList } from "react-icons/ci";
+import { FaGear } from "react-icons/fa6";
+import { MdScreenshotMonitor } from "react-icons/md";
 export function AppSidebar() {
   const navigate = useNavigate();
   const { user } = ZustandPrincipal();
@@ -65,19 +67,37 @@ export function AppSidebar() {
   const items = [
 
     //ITEMS PARA USUARIOS 
+    // {
+    //   title: "Inicio",
+    //   url: "/",
+    //   icon: <IoHome className={iconStlyes} />,
+    // },
+    // {
+    //   title: "Mis Factibilidades",
+    //   url: "/factibilidadDashboard",
+    //   icon: <FaNewspaper className={iconStlyes} />,
+    // },
+    //TERMINA ITEMOS PARA USUARIOS
+
+    //ITEMS OPERADORES
     {
       title: "Inicio",
       url: "/",
       icon: <IoHome className={iconStlyes} />,
     },
     {
-      title: "Mis Factibilidades",
-      url: "/factibilidadDashboard",
-      icon: <FaNewspaper className={iconStlyes} />,
+      title: "Monitor de Factibilidades",
+      url: "/MonitorFactibilidades",
+      icon: <MdScreenshotMonitor className={iconStlyes} />,
     },
-    //TERMINA ITEMOS PARA USUARIOS
-
-    //ITEMS OPERADORES
+    {
+      title: "Configuración",
+      icon: <FaGear />,
+      options: [
+        { title: "Operadores", url: "/Operadores", icon: <FaUsers /> },
+        { title: "Requisitos de factibilidades", url: "/", icon: <CiBoxList /> },
+      ],
+    },
   ]
 
   return (

@@ -75,7 +75,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2 flex flex-col">
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
         <div className="gap-4 w-full grid md:grid-cols-2 grid-cols-1">
           <FormField
             control={form.control}

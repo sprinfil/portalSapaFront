@@ -72,7 +72,7 @@ export const Login = () => {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username</FormLabel>
+                  <FormLabel>Nombre</FormLabel>
                   <FormControl>
                     <Input placeholder="username" {...field} />
                   </FormControl>
@@ -99,16 +99,19 @@ export const Login = () => {
                 </FormItem>
               )}
             />
+            <div className='flex justify-between items-center'>
+              <p>No tienes cuenta? <span className='text-blue-500 hover:underline cursor-pointer'>Registrate</span> </p>
+              <Button type="submit" className='ml-auto' disabled={loading}>
+                {
+                  loading ?
+                    <><Loader /></>
+                    :
+                    <></>
+                }
+                Iniciar Sesión
+              </Button>
+            </div>
 
-            <Button type="submit" className='ml-auto' disabled={loading}>
-              {
-                loading ?
-                  <><Loader /></>
-                  :
-                  <></>
-              }
-              Iniciar Sesión
-            </Button>
           </form>
         </Form>
       </Card>

@@ -9,8 +9,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Button } from "../ui/button"
+import MyDropzone from "./dropzone"
+import { useState } from "react";
+import { FaCheck } from "react-icons/fa";
 
 export function RequisitosFactibilidadTable() {
+  const [archivos, set_archivos] = useState([]);
+
   const cellStyles = "items-center justify-end gap-4 flex"
   return (
     <Table>
@@ -18,7 +23,7 @@ export function RequisitosFactibilidadTable() {
         <TableRow>
           <TableHead className="text-center w-[200px]">Requisito</TableHead>
           <TableHead className="text-center w-[400px]">Documento</TableHead>
-          <TableHead className="text-center"></TableHead>
+          <TableHead className="text-end"><Button>Marcar Documentación lista<FaCheck /></Button></TableHead>
           {/* <TableHead className="text-center">Original</TableHead>
           <TableHead className="text-center">Copia</TableHead> */}
         </TableRow>
@@ -28,8 +33,7 @@ export function RequisitosFactibilidadTable() {
           <TableCell className="items-center text-center bg-muted" rowSpan={6}>Acreditar personalidad jurídica</TableCell>
           <TableCell>Identificacion oficial vigente</TableCell>
           <TableCell className={cellStyles}>
-            <Button variant={"outline"}>Ver</Button>
-            <Button>Subir Archivo</Button>
+            <MyDropzone set={set_archivos}/>
           </TableCell>
         </TableRow>
 
