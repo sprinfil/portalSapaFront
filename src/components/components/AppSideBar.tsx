@@ -30,9 +30,17 @@ import { FaNewspaper } from "react-icons/fa6";
 import { CiBoxList } from "react-icons/ci";
 import { FaGear } from "react-icons/fa6";
 import { MdScreenshotMonitor } from "react-icons/md";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { logout } from "@/lib/AuthService";
+import { Loader } from "./Loader";
+
 export function AppSidebar() {
+  const [logoutLoading, setLogoutLoading] = useState(false);
+
   const navigate = useNavigate();
   const { user } = ZustandPrincipal();
+  const { toast } = useToast();
   const iconStlyes = "text-primary";
   let items = [];
   // const items = [
@@ -103,8 +111,8 @@ export function AppSidebar() {
 
 
   return (
-    <Sidebar>
-      <SidebarContent>
+    <Sidebar >
+      <SidebarContent >
         <div className="w-full flex items-center justify-center">
           <img src={logo} alt="" className="w-[100px]" />
         </div>
@@ -180,13 +188,24 @@ export function AppSidebar() {
               >
                 <DropdownMenuItem
                   className="cursor-pointer"
-                  onClick={() => {
-                    localStorage.setItem("TOKEN", "");
-                    navigate("/login");
+                  onClick={async () => {
+                    try {
+                      await logout(setLogoutLoading);
+                      localStorage.setItem("TOKEN", "");
+                      navigate("/login");
+                    }
+                    catch (e) {
+                      toast({
+                        title: "Error",
+                        description: "Ocurrio un error",
+                        action: <ToastAction altText="Aceptar">Aceptar</ToastAction>
+                      })
+                    }
                   }}
                 >
                   <div className="h-[40px] flex gap-2 items-center text-red-500 cursor-pointer">
                     <MdOutlineExitToApp />
+                    {logoutLoading ? <Loader /> : <></>}
                     Cerrar Sesión
                   </div>
                 </DropdownMenuItem>

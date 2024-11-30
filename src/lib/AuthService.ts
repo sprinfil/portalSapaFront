@@ -147,3 +147,19 @@ export async function resetPassword(
     setLoading(false);
   }
 }
+
+export async function logout(
+  setLoading: Function,
+) {
+  try {
+    setLoading(true);
+    const response = await axiosClient.post("/auth/logout",
+    )
+  }
+  catch (e) {
+    throw e;
+  }
+  finally {
+    setLoading(false);
+  }
+}
