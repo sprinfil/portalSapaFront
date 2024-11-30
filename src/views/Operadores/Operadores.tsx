@@ -52,7 +52,7 @@ export const Operadores = () => {
         </>
         :
         <>
-          <p>Buen Intento</p>
+          <p>Sin acceso</p>
         </>
       }
 

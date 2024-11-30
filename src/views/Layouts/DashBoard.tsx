@@ -21,7 +21,7 @@ export const DashBoard = () => {
           <CardDescription></CardDescription>
         </CardHeader>
         <CardContent>
-        <p>Bienvenido {user?.name} ({user?.username})</p>
+        <p>Bienvenido {user?.name} </p>
         </CardContent>
         <CardFooter>
           

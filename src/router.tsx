@@ -13,6 +13,8 @@ import { FactibilidadMonitor } from './views/Factibilidad/FactibilidadMonitor';
 import { VerFactibilidadMonitor } from './views/Factibilidad/VerFactibilidadMonitor';
 import { Register } from './views/Auth/Register';
 import { VerifyEmail } from './views/Auth/VerifyEmail';
+import { LoginAdmin } from './views/Auth/LoginAdmin';
+import { ResetPassword } from './views/Auth/ResetPassword';
 
 
 const router = createBrowserRouter([
@@ -67,12 +69,20 @@ const router = createBrowserRouter([
                 element: <Login />
             },
             {
+                path: '/login/admin',
+                element: <LoginAdmin />
+            },
+            {
                 path: '/register',
                 element: <Register />
             },
             {
                 path: '/verify-email',
                 element: <VerifyEmail />
+            },
+            {
+                path: '/validate-reset-password',
+                element: <ResetPassword />
             },
         ]
     },

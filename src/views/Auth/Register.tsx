@@ -89,7 +89,8 @@ export const Register = () => {
     <div className='h-[100vh] w-full flex items-center justify-center'>
       <Card className='w-[600px]  p-5 shadow-md shadow-green-800'>
         <div className='w-full items-center  flex justify-center'>
-          <FaUserCircle className='w-[100px] h-[100px] text-green-500' />
+          {/* <FaUserCircle className='w-[100px] h-[100px] text-green-500' /> */}
+          <img src={logo} className='w-[150px]' />
         </div>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col">
@@ -119,7 +120,7 @@ export const Register = () => {
                     <Input type='email' placeholder="Correo" {...field} />
                   </FormControl>
                   <FormDescription>
-                    Correo
+          
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -170,7 +171,7 @@ export const Register = () => {
                     :
                     <></>
                 }
-                Aceptar y guardar
+                Registrarme
               </Button>
             </div>
 

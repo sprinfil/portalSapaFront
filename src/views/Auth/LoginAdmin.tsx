@@ -1,5 +1,5 @@
 import { Card } from '@/components/ui/card'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -20,21 +20,20 @@ import { ToastAction } from "@/components/ui/toast"
 import { Loader } from '@/components/components/Loader'
 import { FaUserCircle } from "react-icons/fa";
 import { LoaderSecondary } from '@/components/components/LoaderSecondary'
-import { login } from '@/lib/AuthService'
+import { login, loginAdmin } from '@/lib/AuthService'
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast'
 import logo from "../../assets/SAPALOGO.png"
 import { navigateWhenKeyPress } from '@/lib/ToolsService'
-import { ModalRecuperarContraseña } from '@/components/components/ModalRecuperarContraseña'
 
-export const Login = () => {
+export const LoginAdmin = () => {
   const navigate = useNavigate();
   const { token, setToken, setUser } = ZustandPrincipal();
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   const formSchema = z.object({
-    email: z.string().min(2).max(50),
+    username: z.string().min(2).max(50),
     password: z.string().min(2).max(50)
   })
 
@@ -45,15 +44,14 @@ export const Login = () => {
       password: "",
     },
   })
-
-  navigateWhenKeyPress("F1", "/login/admin");
+  navigateWhenKeyPress("F1", "/login");
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       // localStorage.setItem("TOKEN", 'SDFSDFSDF');
       // navigate("/dashboard");
 
-      await login(setLoading, values?.email, values?.password, setToken, setUser);
+      await loginAdmin(setLoading, values?.username, values?.password, setToken, setUser);
     } catch (e) {
       toast({
         title: 'Ocurrio un error',
@@ -62,7 +60,6 @@ export const Login = () => {
       })
     }
   }
-
 
 
   return (
@@ -76,12 +73,12 @@ export const Login = () => {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 w-full flex flex-col">
             <FormField
               control={form.control}
-              name="email"
+              name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Correo</FormLabel>
+                  <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input type='email' placeholder="Correo" {...field} />
+                    <Input type='text' placeholder="Username" {...field} />
                   </FormControl>
                   <FormDescription>
 
@@ -100,19 +97,13 @@ export const Login = () => {
                     <Input placeholder="Contraseña" type="password" {...field} />
                   </FormControl>
                   <FormDescription>
-                    <>
-                      <div className='flex gap-1'>
-                        <p>¿Olvidaste tu contraseña?</p> <ModalRecuperarContraseña />
-                      </div>
-
-                    </>
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
             />
             <div className='flex justify-between items-center'>
-              <p className='text-muted-foreground'>¿No tienes cuenta? <span onClick={() => navigate("/register")} className='text-blue-500 hover:underline cursor-pointer'>Registrate</span> </p>
+              {/* <p>No tienes cuenta? <span onClick={() => navigate("/register")} className='text-blue-500 hover:underline cursor-pointer'>Registrate</span> </p> */}
               <Button type="submit" className='ml-auto' disabled={loading}>
                 {
                   loading ?
@@ -126,7 +117,7 @@ export const Login = () => {
 
           </form>
         </Form>
-      </Card >
-    </div >
+      </Card>
+    </div>
   )
 }

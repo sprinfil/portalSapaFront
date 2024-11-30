@@ -7,13 +7,14 @@ import logo from "../../assets/SAPALOGO.png"
 import { useLocation } from 'react-router-dom';
 import { ToastAction } from '@radix-ui/react-toast';
 import { Loader } from '@/components/components/Loader';
+
 export const VerifyEmail = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const { toast } = useToast();
-  const location = useLocation();
 
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get('code');
 

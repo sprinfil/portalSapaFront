@@ -34,7 +34,7 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { user } = ZustandPrincipal();
   const iconStlyes = "text-primary";
-
+  let items = [];
   // const items = [
   //   {
   //     title: "Home",
@@ -64,41 +64,43 @@ export function AppSidebar() {
   //   },
   // ];
 
-  const items = [
 
-    //ITEMS PARA USUARIOS 
-    // {
-    //   title: "Inicio",
-    //   url: "/",
-    //   icon: <IoHome className={iconStlyes} />,
-    // },
-    // {
-    //   title: "Mis Factibilidades",
-    //   url: "/factibilidadDashboard",
-    //   icon: <FaNewspaper className={iconStlyes} />,
-    // },
-    //TERMINA ITEMOS PARA USUARIOS
+  if (user?.roles[0]?.name == "public") {
+    items = [
+      {
+        title: "Inicio",
+        url: "/",
+        icon: <IoHome className={iconStlyes} />,
+      },
+      {
+        title: "Mis Factibilidades",
+        url: "/factibilidadDashboard",
+        icon: <FaNewspaper className={iconStlyes} />,
+      },
+    ]
+  } else {
+    items = [
+      {
+        title: "Inicio",
+        url: "/",
+        icon: <IoHome className={iconStlyes} />,
+      },
+      {
+        title: "Monitor de Factibilidades",
+        url: "/MonitorFactibilidades",
+        icon: <MdScreenshotMonitor className={iconStlyes} />,
+      },
+      {
+        title: "Configuración",
+        icon: <FaGear />,
+        options: [
+          { title: "Operadores", url: "/Operadores", icon: <FaUsers /> },
+          { title: "Requisitos de factibilidades", url: "/", icon: <CiBoxList /> },
+        ],
+      },
+    ]
+  }
 
-    //ITEMS OPERADORES
-    {
-      title: "Inicio",
-      url: "/",
-      icon: <IoHome className={iconStlyes} />,
-    },
-    {
-      title: "Monitor de Factibilidades",
-      url: "/MonitorFactibilidades",
-      icon: <MdScreenshotMonitor className={iconStlyes} />,
-    },
-    {
-      title: "Configuración",
-      icon: <FaGear />,
-      options: [
-        { title: "Operadores", url: "/Operadores", icon: <FaUsers /> },
-        { title: "Requisitos de factibilidades", url: "/", icon: <CiBoxList /> },
-      ],
-    },
-  ]
 
   return (
     <Sidebar>
@@ -169,7 +171,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <FaUser className={iconStlyes} /> {user?.name} ({user?.username})
+                  <FaUser className={iconStlyes} /> {user?.name}
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
