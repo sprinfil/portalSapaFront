@@ -25,48 +25,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
 
 const formSchema = z.object({
-  nombre_completo: z.string().min(2, {
+  apoderado_nombre: z.string().min(2, {
     message: "El nombre es obligatorio",
   }),
-  domicilio: z.string().min(2, {
+  apoderado_domicilio: z.string().min(2, {
     message: "el domicilio es obligatorio",
   }),
-  localidad: z.string().min(2, {
+  apoderado_localidad: z.string().min(2, {
     message: "la localidad es obligatoria",
   }),
-  correo: z.string().min(2, {
+  apoderado_correo_electronico: z.string().min(2, {
     message: "el correo es obligatorio"
   }),
-  codigo_postal: z.string().min(2, {
+  apoderado_codigo_postal: z.string().min(2, {
     message: "el codigo postal es obligatorio"
   }),
-  tel_fijo: z.preprocess(
+  apoderado_telefono_fijo: z.preprocess(
     (value) => (value === "" ? undefined : value),
-    z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" }).optional()
+    z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" })
   ),
-  tel_movil: z.preprocess(
+  apoderado_telefono_movil: z.preprocess(
     (value) => (value === "" ? undefined : value),
-    z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" }).optional()
+    z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" })
   ),
-  calidad: z.enum(["representante", "apoderado"], {
+  apoderado_tipo_representante: z.enum(["representante", "apoderado"], {
     required_error: "Selecciona una opción",
   }),
 })
 
-export function DatosApoderadoForm({ api, setProgress, disabled }) {
+export function DatosApoderadoForm({ api, setProgress, disabled, defaultValues, tramite,
+  setTramite }) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-
+      ...defaultValues
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
 
-    console.log(values)
+    setTramite(tramiteTemp);
 
     api.scrollNext();
     setProgress(52);
@@ -75,11 +82,11 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
 
         <FormField
           control={form.control}
-          name="nombre_completo"
+          name="apoderado_nombre"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre completo</FormLabel>
@@ -96,7 +103,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="domicilio"
+          name="apoderado_domicilio"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Domicilio</FormLabel>
@@ -113,7 +120,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="localidad"
+          name="apoderado_localidad"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Localidad</FormLabel>
@@ -140,7 +147,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="correo"
+          name="apoderado_correo_electronico"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Correo</FormLabel>
@@ -158,7 +165,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="codigo_postal"
+            name="apoderado_codigo_postal"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Código postal</FormLabel>
@@ -174,7 +181,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_fijo"
+            name="apoderado_telefono_fijo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. fijo</FormLabel>
@@ -190,7 +197,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_movil"
+            name="apoderado_telefono_movil"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. móvil</FormLabel>
@@ -208,7 +215,7 @@ export function DatosApoderadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="calidad"
+          name="apoderado_tipo_representante"
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>En calidad de ...</FormLabel>

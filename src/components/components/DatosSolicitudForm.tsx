@@ -25,14 +25,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
 
 const formSchema = z.object({
-  tipo_contrato: z.enum(["1", "2"], {
+  id_contrato: z.enum(["1", "2"], {
     required_error: "Selecciona un tipo de contrato",
-  }),
-
-  localidad: z.string().min(2, {
-    message: "Selecciona una localidad",
   }),
 
   modalidad: z.enum(["nuevo", "regularizacion"], {
@@ -43,24 +40,41 @@ const formSchema = z.object({
     message: "Selecciona un giro comerical",
   }),
 
+  localidad: z.string().min(2, {
+    message: "Selecciona una localidad",
+  }),
+
 })
 
 export function DatosSolicitudForm({
   api,
   setProgress,
-  disabled
+  disabled,
+  idContrato,
+  defaultValues,
+  tramite,
+  setTramite
 }) {
+
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      localidad: "",
+      ...defaultValues,
+      id_contrato: idContrato ?? defaultValues?.id_contrato,
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
+
+    setTramite(tramiteTemp);
 
     api.scrollNext();
     setProgress(16);
@@ -69,16 +83,18 @@ export function DatosSolicitudForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
 
         <FormField
           control={form.control}
-          name="tipo_contrato"
+          name="id_contrato"
+
           render={({ field }) => (
             <FormItem className="space-y-3">
               <FormLabel>Tipo de contrato</FormLabel>
               <FormControl>
                 <RadioGroup
+                  disabled={true}
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                   className="flex flex-col space-y-1"

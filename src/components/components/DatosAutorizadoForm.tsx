@@ -25,58 +25,68 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
 
 const formSchema = z.object({
-  nombre_completo: z.string().min(2, {
+  autorizado_nombre: z.string().min(2, {
     message: "El nombre es obligatorio",
   }),
-  domicilio: z.string().min(2, {
+  autorizado_domicilio: z.string().min(2, {
     message: "el domicilio es obligatorio",
   }),
-  localidad: z.string().min(2, {
+  autorizado_localidad: z.string().min(2, {
     message: "la localidad es obligatoria",
   }),
-  correo: z.string().min(2, {
+  autorizado_correo_electronico: z.string().min(2, {
     message: "el correo es obligatorio"
   }),
-  codigo_postal: z.string().min(2, {
+  autorizado_codigo_postal: z.string().min(2, {
     message: "el codigo postal es obligatorio"
   }),
-  tel_fijo: z.preprocess(
+  autorizado_telefono_fijo: z.preprocess(
     (value) => (value === "" ? undefined : value),
     z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" }).optional()
   ),
-  tel_movil: z.preprocess(
+  autorizado_telefono_movil: z.preprocess(
     (value) => (value === "" ? undefined : value),
     z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" }).optional()
   ),
 })
 
-export function DatosAutorizadoForm({ api, setProgress, disabled }) {
+export function DatosAutorizadoForm({ api, setProgress, disabled, defaultValues, tramite,
+  setTramite }) {
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-
+      ...defaultValues
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
+
+    setTramite(tramiteTemp);
 
     api.scrollNext();
+
     setProgress(67);
   }
 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
 
         <FormField
           control={form.control}
-          name="nombre_completo"
+          name="autorizado_nombre"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre completo</FormLabel>
@@ -93,7 +103,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="domicilio"
+          name="autorizado_domicilio"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Domicilio</FormLabel>
@@ -110,7 +120,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="localidad"
+          name="autorizado_localidad"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Localidad</FormLabel>
@@ -137,7 +147,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="correo"
+          name="autorizado_correo_electronico"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Correo</FormLabel>
@@ -155,7 +165,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="codigo_postal"
+            name="autorizado_codigo_postal"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Código postal</FormLabel>
@@ -171,7 +181,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_fijo"
+            name="autorizado_telefono_fijo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. fijo</FormLabel>
@@ -187,7 +197,7 @@ export function DatosAutorizadoForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_movil"
+            name="autorizado_telefono_movil"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. móvil</FormLabel>

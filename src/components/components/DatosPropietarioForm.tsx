@@ -25,48 +25,64 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
 
 const formSchema = z.object({
-  nombre_completo: z.string().min(2, {
+  propietario_nombre: z.string().min(2, {
     message: "El nombre es obligatorio",
   }),
-  razon_social: z.string().min(2, {
+  propietario_razon_social: z.string().min(2, {
     message: "la razon social es obligatoria",
   }),
-  domicilio: z.string().min(2, {
+  propietario_domicilio: z.string().min(2, {
     message: "el domicilio es obligatorio",
   }),
-  localidad: z.string().min(2, {
+  propietario_localidad: z.string().min(2, {
     message: "la localidad es obligatoria",
   }),
-  correo: z.string().min(2, {
+  propietario_correo_electronico: z.string().min(2, {
     message: "el correo es obligatorio"
   }),
-  codigo_postal: z.string().min(2, {
+  propietario_codigo_postal: z.string().min(2, {
     message: "el codigo postal es obligatorio"
   }),
-  tel_fijo: z.preprocess(
-    (value) => (value === "" ? undefined : value),
-    z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" }).optional()
-  ),
-  tel_movil: z.preprocess(
-    (value) => (value === "" ? undefined : value),
-    z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" }).optional()
-  ),
+  // propietario_telefono_fijo: z.preprocess(
+  //   (value) => (value === "" ? undefined : value),
+  //   z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" }).optional()
+  // ),
+  // propietario_telefono_movil: z.preprocess(
+  //   (value) => (value === "" ? undefined : value),
+  //   z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" }).optional()
+  // ),
+
+  propietario_telefono_fijo:
+    z.string().min(10, { message: "El teléfono fijo debe tener al menos 10 dígitos" }),
+
+  propietario_telefono_movil:
+    z.string().min(10, { message: "El teléfono móvil debe tener al menos 10 dígitos" })
+
 })
 
-export function DatosPropietarioForm({ api, setProgress, disabled }) {
+export function DatosPropietarioForm({ api, setProgress, disabled, defaultValues,  tramite,
+  setTramite }) {
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-
+      ...defaultValues,
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
+
+    setTramite(tramiteTemp);
 
     api.scrollNext();
     setProgress(36);
@@ -75,11 +91,11 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
         <div className="gap-4 w-full grid md:grid-cols-2 grid-cols-1">
           <FormField
             control={form.control}
-            name="nombre_completo"
+            name="propietario_nombre"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Nombre completo</FormLabel>
@@ -96,7 +112,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
           <FormField
             control={form.control}
-            name="razon_social"
+            name="propietario_razon_social"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Razón social</FormLabel>
@@ -116,12 +132,12 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="domicilio"
+          name="propietario_domicilio"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Domicilio</FormLabel>
               <FormControl>
-                <Input placeholder="domicilio ..." {...field} />
+                <Input placeholder="Domicilio ..." {...field} />
               </FormControl>
               <FormDescription>
 
@@ -133,7 +149,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="localidad"
+          name="propietario_localidad"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Localidad</FormLabel>
@@ -160,7 +176,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="correo"
+          name="propietario_correo_electronico"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Correo</FormLabel>
@@ -178,7 +194,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
         <div className="grid md:grid-cols-3 grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="codigo_postal"
+            name="propietario_codigo_postal"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Código postal</FormLabel>
@@ -194,7 +210,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_fijo"
+            name="propietario_telefono_fijo"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. fijo</FormLabel>
@@ -210,7 +226,7 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="tel_movil"
+            name="propietario_telefono_movil"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Tel. móvil</FormLabel>
@@ -231,7 +247,8 @@ export function DatosPropietarioForm({ api, setProgress, disabled }) {
             <>
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                 <div className="w-full md:w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
-                <Button type="submit" className="ml-auto w-full md:w-[200px]">Siguiente paso<FaArrowRight /></Button>
+                <Button type="submit" className="ml-auto w-full md:w-[200px]">
+                  Siguiente paso<FaArrowRight /></Button>
               </div>
             </> : <></>
         }

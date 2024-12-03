@@ -25,35 +25,59 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
+import { storeTramite } from "@/lib/TramiteService"
+import { useState } from "react"
+import { useToast } from "@/hooks/use-toast"
+import { ToastAction } from "@radix-ui/react-toast"
+import { Loader } from "./Loader"
+import { useNavigate } from "react-router-dom"
 const formSchema = z.object({
-  uso_suelo: z.enum(["1", "2", "3", "4"], {
+  uso_de_suelo_actual: z.enum(["habitacional", "comercial", "industrial", "turistico"], {
     required_error: "Selecciona un tipo de contrato",
   }),
-  tipo_calle: z.enum(["1", "2", "3", "4"], {
+  tipo_de_calle: z.enum(["tierra", "empedrado", "concreto", "asfalto"], {
     required_error: "Selecciona un tipo de contrato",
   }),
-  instalaciones_existentes: z.enum(["1", "2", "3", "4"], {
+  instalaciones_existentes: z.enum(["ninguna", "cuadro", "cajaNegra", "otro"], {
     required_error: "Selecciona un tipo de instalacion existente",
   }),
-  regimen_condominio: z.enum(["1", "2", "3", "4"], {
+  regimen_de_condominios: z.boolean({
     required_error: "Escoge una opcion",
-  })
+  }),
 })
 
-export function DatosAdicionalesForm({ api, setProgress, disabled }) {
+export function DatosAdicionalesForm({ api, setProgress, disabled, defaultValues, tramite,
+  setTramite }) {
+  const [loading, setLoading] = useState(false);
+
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-
+      ...defaultValues,
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
 
+    setTramite(tramiteTemp);
+
+    try {
+      const { tramiteId } = await storeTramite(setLoading, tramiteTemp, setTramite);
+      navigate(`/factibilidadDashboard/verFactibilidad?tramiteId=${tramiteId}`);
+    }
+    catch (e) {
+      toast({ title: "Error", description: "Algo salió mal", variant: "destructive", action: <ToastAction altText="Aceptar">Aceptar</ToastAction> })
+    }
     api.scrollNext();
     setProgress(100);
   }
@@ -61,11 +85,11 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
         <div className="flex gap-10 flex-wrap mb-[100px]">
           <FormField
             control={form.control}
-            name="uso_suelo"
+            name="uso_de_suelo_actual"
             render={({ field }) => (
               <FormItem className="">
                 <FormLabel>Uso de suelo actual</FormLabel>
@@ -77,7 +101,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="habitacional" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Habitacional
@@ -86,7 +110,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="comercial" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Comercial
@@ -95,7 +119,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="3" />
+                        <RadioGroupItem value="industrial" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Industrial
@@ -105,7 +129,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="4" />
+                        <RadioGroupItem value="turistico" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Turístico
@@ -121,7 +145,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
           <FormField
             control={form.control}
-            name="tipo_calle"
+            name="tipo_de_calle"
             render={({ field }) => (
               <FormItem className="">
                 <FormLabel>Tipo de calle</FormLabel>
@@ -133,7 +157,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="tierra" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Tierra
@@ -142,7 +166,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="empedrado" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Empedrado
@@ -151,7 +175,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="3" />
+                        <RadioGroupItem value="concreto" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Concreto
@@ -161,7 +185,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="4" />
+                        <RadioGroupItem value="asfalto" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Asfalto
@@ -189,7 +213,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="ninguna" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Ninguna
@@ -198,7 +222,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="cuadro" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Cuadro
@@ -207,7 +231,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="3" />
+                        <RadioGroupItem value="cajaNegra" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Caja negra
@@ -217,7 +241,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="4" />
+                        <RadioGroupItem value="otro" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Otro
@@ -233,19 +257,19 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
           <FormField
             control={form.control}
-            name="regimen_condominio"
+            name="regimen_de_condominios"
             render={({ field }) => (
               <FormItem className="">
                 <FormLabel>Regimen en condominio</FormLabel>
                 <FormControl>
                   <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
+                    onValueChange={(value) => field.onChange(value === "true")}
+                    value={field.value ? "true" : "false"}
                     className="flex flex-col space-y-1"
                   >
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="1" />
+                        <RadioGroupItem value="true" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         Si
@@ -254,7 +278,7 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
 
                     <FormItem className="flex items-center space-x-3 space-y-0">
                       <FormControl>
-                        <RadioGroupItem value="2" />
+                        <RadioGroupItem value="false" />
                       </FormControl>
                       <FormLabel className="font-normal">
                         No
@@ -275,7 +299,16 @@ export function DatosAdicionalesForm({ api, setProgress, disabled }) {
             <>
               <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
                 <div className="w-full md:w-[200px] cursor-pointer  border rounded-md py-2 text-center flex items-center justify-center" onClick={() => api.scrollPrev()}><FaArrowLeft className="mr-5" /> <p>Volver</p></div>
-                <Button type="submit" className="ml-auto w-full md:w-[200px]">Finalizar y guardar<FaArrowRight /></Button>
+
+                <Button disabled={loading} type="submit" className="ml-auto w-full md:w-[200px]">
+                  Finalizar y guardar<FaArrowRight />
+                </Button>
+                {
+                  loading ?
+                    <><Loader /></>
+                    :
+                    <></>
+                }
               </div>
             </> : <></>
         }

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -21,7 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { DatosSolicitudForm } from '@/components/components/DatosSolicitudForm';
 import { DatosPropietarioForm } from '@/components/components/DatosPropietarioForm';
 import { DatosPredioForm } from '@/components/components/DatosPredioForm';
@@ -29,10 +29,40 @@ import { DatosAutorizadoForm } from '@/components/components/DatosAutorizadoForm
 import { DatosApoderadoForm } from '@/components/components/DatosApoderadoForm';
 import { DatosAdicionalesForm } from '@/components/components/DatosAdicionalesForm';
 import { RequisitosFactibilidadTable } from '@/components/components/RequisitosFactibilidadTable';
+import { getTramiteById } from '@/lib/TramiteService';
+import { useToast } from '@/hooks/use-toast';
+import { ToastAction } from '@radix-ui/react-toast';
+import { Loader } from '@/components/components/Loader';
 
 export const VerFactibilidad = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const formTitleStyles = ""
+  const [tramite, setTramite] = useState({});
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const tramiteId = queryParams.get('tramiteId');
+
+
+  const fetch = async () => {
+    try {
+      await getTramiteById(setLoading, tramiteId ?? 0, setTramite);
+    }
+    catch (e) {
+      toast({
+        title: "Error",
+        description: "Algo salio mal",
+        variant: "destructive",
+        action: <ToastAction altText='Aceptar'>Aceptar</ToastAction>
+      })
+    }
+  }
+
+  useEffect(() => {
+    fetch();
+  }, [])
+
   return (
     <div className='h-full w-full'>
       <Card className='h-full'>
@@ -44,7 +74,7 @@ export const VerFactibilidad = () => {
               </BreadcrumbItem>
               <BreadcrumbSeparator />
               <BreadcrumbItem>
-                <BreadcrumbPage>Factibilidad: SF001</BreadcrumbPage>
+                <BreadcrumbPage>Factibilidad: {tramite?.folio}</BreadcrumbPage>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
@@ -57,27 +87,34 @@ export const VerFactibilidad = () => {
               <TabsTrigger value="requisitos">Documentación</TabsTrigger>
             </TabsList>
             <TabsContent value="informacionPrincipal">
-              <p className='font-bold'>Datos de la solicitud</p>
-              <DatosSolicitudForm disabled={true} />
+              {
+                loading ? <div className='w-full flex items-center justify-center'><Loader /> </div>
+                  :
+                  <>
+                    <p className='font-bold'>Datos de la solicitud</p>
+                    <DatosSolicitudForm disabled={true} defaultValues={tramite} />
 
-              <p className='font-bold mt-10'>Datos del propietario</p>
-              <DatosPropietarioForm disabled={true} />
+                    <p className='font-bold mt-10'>Datos del propietario</p>
+                    <DatosPropietarioForm disabled={true} defaultValues={tramite} />
 
-              <p className='font-bold mt-10'>Apoderado legal o representante personal</p>
-              <DatosApoderadoForm disabled={true} />
+                    <p className='font-bold mt-10'>Apoderado legal o representante personal</p>
+                    <DatosApoderadoForm disabled={true} defaultValues={tramite} />
 
-              <p className='font-bold mt-10'>Datos del autorizado para oir y recibir notificaciones</p>
-              <DatosAutorizadoForm disabled={true} />
+                    <p className='font-bold mt-10'>Datos del autorizado para oir y recibir notificaciones</p>
+                    <DatosAutorizadoForm disabled={true} defaultValues={tramite} />
 
-              <p className='font-bold mt-10'>Datos básicos del predio</p>
-              <DatosPredioForm disabled={true} />
+                    <p className='font-bold mt-10'>Datos básicos del predio</p>
+                    <DatosPredioForm disabled={true} defaultValues={tramite} />
 
-              <p className='font-bold mt-10'>Datos adicionales</p>
-              <DatosAdicionalesForm disabled={true} />
+                    <p className='font-bold mt-10'>Datos adicionales</p>
+                    <DatosAdicionalesForm disabled={true} defaultValues={tramite} />
+                  </>
+              }
+
             </TabsContent>
             <TabsContent value="requisitos">
               <div className='h-full'>
-                <RequisitosFactibilidadTable/>
+                <RequisitosFactibilidadTable />
               </div>
             </TabsContent>
           </Tabs>

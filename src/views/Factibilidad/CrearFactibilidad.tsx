@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,12 +15,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ZustandPrincipal from '@/Zustand/ZustandPrincipal';
+import { ModalSolicitudPendiente } from '@/components/components/ModalSolicitudPendiente';
+import { Button } from '@/components/ui/button';
 
 export const CrearFactibilidad = () => {
   const navigate = useNavigate();
+  const { tramite, setTramite, user } = ZustandPrincipal();
+  const ButtonTriggerModal = useRef();
+  const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    if (tramite?.id_contrato != null && tramite?.id_solicitante == user?.id) {
+      setOpenModal(true);
+    }
+  }, [])
+
   return (
     <Card className='h-full'>
+
       <CardHeader>
         <Breadcrumb>
           <BreadcrumbList>
@@ -35,10 +49,13 @@ export const CrearFactibilidad = () => {
         </Breadcrumb>
       </CardHeader>
       <CardContent>
+        <ModalSolicitudPendiente open={openModal} setOpen={setOpenModal} />
+        
         <p>Seleccione el tipo de contrato</p>
         <div className='grid md:grid-cols-2 grid-cols-1 mt-4 gap-4'>
-          <Card onClick={()=>navigate("/factibilidadFormulario")} className='h-[600px] overflow-auto cursor-pointer hover:bg-muted transition-all duration-200'>
+          <Card onClick={() => navigate("/factibilidadFormulario?idContrato=1")} className='h-[600px] overflow-auto cursor-pointer hover:bg-muted transition-all duration-200'>
             <CardHeader>
+
               <CardTitle>Doméstico, Comercial Industrial con infraestructura existente</CardTitle>
               <CardDescription>
                 <p className='font-bold'>Lista de requisitos</p>
@@ -67,7 +84,7 @@ export const CrearFactibilidad = () => {
               </CardDescription>
             </CardHeader>
           </Card>
-          <Card onClick={()=>navigate("/factibilidadFormulario")} className='h-[600px] overflow-auto cursor-pointer hover:bg-muted transition-all duration-200'>
+          <Card onClick={() => navigate("/factibilidadFormulario?idContrato=2")} className='h-[600px] overflow-auto cursor-pointer hover:bg-muted transition-all duration-200'>
             <CardHeader>
               <CardTitle>Comercial, Industrial, y desarrollo habitacional para infraestructura nueva</CardTitle>
               <CardDescription>
@@ -96,6 +113,7 @@ export const CrearFactibilidad = () => {
                 <p>• Reglamento autorizado por el H. Ayuntamiento de La Paz</p>
               </CardDescription>
             </CardHeader>
+
           </Card>
         </div>
       </CardContent>

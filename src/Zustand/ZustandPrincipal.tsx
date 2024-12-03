@@ -9,10 +9,20 @@ const ZustandPrincipal = create(
 
       token: "",
       setToken: (tokenTemp) => set({ token: tokenTemp }),
+
+      tramite: "",
+      setTramite: (tramiteTemp) => set({ tramite: tramiteTemp }),
     }),
+
+
     {
-      name: 'zustand-storage', 
-      partialize: (state) => ({ user: state.user, token: state.token }), 
+      name: 'zustand-storage',
+      
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        tramite: state.tramite
+      }),
     }
   )
 );

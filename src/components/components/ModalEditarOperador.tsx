@@ -62,6 +62,9 @@ export function ModalEditarOperador({ trigger, setData, operador }) {
       }),
       password: z.string().optional(),
       password_confirmation: z.string().optional(),
+      email: z.string().min(2, {
+        message: "El correo debe llevar mas de 2 caracteres",
+      }).optional(),
     })
     .refine((data) => data.password === data.password_confirmation, {
       message: "Las contraseñas no coinciden",
@@ -73,6 +76,7 @@ export function ModalEditarOperador({ trigger, setData, operador }) {
     defaultValues: {
       name: operador?.name,
       username: operador?.username,
+      email: operador?.email
     },
   })
 
@@ -85,7 +89,7 @@ export function ModalEditarOperador({ trigger, setData, operador }) {
 
     let valuesTemp = {
       ...values,
-      email: `email${Date.now()}@hotmail.com`,
+      // email: `email${Date.now()}@hotmail.com`,
       add_roles: addRoles,
       remove_roles: removeRoles
     };
@@ -156,6 +160,22 @@ export function ModalEditarOperador({ trigger, setData, operador }) {
                         </FormControl>
                         <FormDescription>
                           Username para ingresar al sistema.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Correo</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="Correo" {...field} />
+                        </FormControl>
+                        <FormDescription>
+
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

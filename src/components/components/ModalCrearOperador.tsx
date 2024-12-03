@@ -66,6 +66,9 @@ export function ModalCrearOperador({ trigger, setData }) {
       password_confirmation: z.string().min(2, {
         message: "Se debe confirmar la contraseña",
       }),
+      email: z.string().min(2, {
+        message: "El correo debe llevar mas de 2 caracteres",
+      }).optional(),
       // role: z.string().min(1, {
       //   message: "Se debe seleccionar un rol",
       // }),
@@ -86,7 +89,7 @@ export function ModalCrearOperador({ trigger, setData }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     let valuesTemp = {
       ...values,
-      email: `email${Date.now()}@hotmail.com`,
+      // email: `email${Date.now()}@hotmail.com`,
       roles: selectedRoles,
     };
 
@@ -156,6 +159,22 @@ export function ModalCrearOperador({ trigger, setData }) {
                         </FormControl>
                         <FormDescription>
                           Username para ingresar al sistema.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Correo</FormLabel>
+                        <FormControl>
+                          <Input type="email" placeholder="Correo" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                    
                         </FormDescription>
                         <FormMessage />
                       </FormItem>

@@ -15,7 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Carousel,
   CarouselContent,
@@ -31,19 +31,34 @@ import { DatosApoderadoForm } from '@/components/components/DatosApoderadoForm';
 import { DatosAutorizadoForm } from '@/components/components/DatosAutorizadoForm';
 import { DatosPredioForm } from '@/components/components/DatosPredioForm';
 import { DatosAdicionalesForm } from '@/components/components/DatosAdicionalesForm';
+import ZustandPrincipal from '@/Zustand/ZustandPrincipal';
 
 export const FactibilidadFormulario = () => {
   const navigate = useNavigate();
   const [api, setApi] = React.useState<CarouselApi>()
   const [progress, setProgress] = useState(0);
+  const { tramite, user, setTramite } = ZustandPrincipal();
+
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const idContrato = queryParams.get('idContrato');
+
+  // React.useEffect(() => {
+  //   if (!api) {
+  //     return
+  //   }
+
+  //   // api.scrollNext();
+  // }, [api])
 
   React.useEffect(() => {
-    if (!api) {
-      return
+    let tramiteTemp =
+    {
+      ...tramite,
+      id_solicitante: user?.id
     }
-
-    // api.scrollNext();
-  }, [api])
+    setTramite(tramiteTemp);
+  }, [])
 
 
   return (
@@ -67,12 +82,12 @@ export const FactibilidadFormulario = () => {
           </Breadcrumb>
         </CardHeader>
         <CardContent className='flex flex-col items-center justify-center'>
-      
-            <div className='w-[40%] flex flex-col items-center justify-center'>
-              <p>Progreso</p>
-              <Progress value={progress} className='w-full mb-4 ' />
-            </div>
- 
+
+          <div className='w-[40%] flex flex-col items-center justify-center'>
+            <p>Progreso</p>
+            <Progress value={progress} className='w-full mb-4 ' />
+          </div>
+
           <Carousel
             setApi={setApi}
             opts={{
@@ -89,7 +104,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosSolicitudForm api={api} setProgress={setProgress} />
+                      <DatosSolicitudForm api={api} setProgress={setProgress} idContrato={idContrato} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -103,7 +118,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosPropietarioForm api={api} setProgress={setProgress} />
+                      <DatosPropietarioForm api={api} setProgress={setProgress} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -117,7 +132,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosApoderadoForm api={api} setProgress={setProgress} />
+                      <DatosApoderadoForm api={api} setProgress={setProgress} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -131,7 +146,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosAutorizadoForm api={api} setProgress={setProgress} />
+                      <DatosAutorizadoForm api={api} setProgress={setProgress} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -146,7 +161,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosPredioForm api={api} setProgress={setProgress} />
+                      <DatosPredioForm api={api} setProgress={setProgress} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>
@@ -160,7 +175,7 @@ export const FactibilidadFormulario = () => {
                       <CardDescription>Llene y verifique la información</CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <DatosAdicionalesForm api={api} setProgress={setProgress} />
+                      <DatosAdicionalesForm api={api} setProgress={setProgress} defaultValues={tramite} tramite={tramite} setTramite={setTramite} />
                     </CardContent>
                   </CardContent>
                 </Card>

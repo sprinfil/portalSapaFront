@@ -25,58 +25,71 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal"
 
 const formSchema = z.object({
-  calle: z.string().min(2, {
+  predio_calle: z.string().min(2, {
     message: "la calle es obligatoria",
   }),
-  numero: z.string().min(2, {
+  predio_numero: z.string().min(2, {
     message: "el numero es obligatorio",
   }),
-  entre_calles: z.string().min(2, {
+  predio_entre_calle: z.string().min(2, {
     message: "este campo es obligatorio",
   }),
-  colonia: z.string().min(2, {
+  predio_colonia: z.string().min(2, {
     message: "la colonia es obligatoria",
   }),
-  clave_catastral: z.string().min(2, {
+  predio_clave_catastral: z.string().min(2, {
     message: "la clave catastral es obligatoria",
   }),
-  codigo_postal: z.string().min(2, {
+  predio_codigo_postal: z.string().min(2, {
     message: "El codigo postal es obligatorio",
   }),
 
-  localidad: z.string().min(2, {
+  predio_localidad: z.string().min(2, {
     message: "Selecciona una localidad",
   }),
 })
 
-export function DatosPredioForm({ api, setProgress, disabled }) {
+export function DatosPredioForm({ api, setProgress, disabled, defaultValues, tramite,
+  setTramite }) {
+
+
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-
+      ...defaultValues
     },
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
 
-    console.log(values)
+
+    let tramiteTemp =
+    {
+      ...tramite,
+      ...values
+    }
+
+    setTramite(tramiteTemp);
 
     api.scrollNext();
+
+
     setProgress(83);
   }
 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none":""}`}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className={`space-y-2 flex flex-col ${disabled ? "pointer-events-none select-none" : ""}`}>
 
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="calle"
+            name="predio_calle"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Calle</FormLabel>
@@ -92,7 +105,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="numero"
+            name="predio_numero"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Número</FormLabel>
@@ -110,7 +123,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="entre_calles"
+          name="predio_entre_calle"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Entre calles</FormLabel>
@@ -127,7 +140,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
 
         <FormField
           control={form.control}
-          name="colonia"
+          name="predio_colonia"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Colonia</FormLabel>
@@ -143,7 +156,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
         />
         <FormField
           control={form.control}
-          name="clave_catastral"
+          name="predio_clave_catastral"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Clave catastral</FormLabel>
@@ -160,7 +173,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
         <div className="grid md:grid-cols-2 grid-cols-1 gap-4">
           <FormField
             control={form.control}
-            name="codigo_postal"
+            name="predio_codigo_postal"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Código postal</FormLabel>
@@ -176,7 +189,7 @@ export function DatosPredioForm({ api, setProgress, disabled }) {
           />
           <FormField
             control={form.control}
-            name="localidad"
+            name="predio_localidad"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Localidad</FormLabel>
