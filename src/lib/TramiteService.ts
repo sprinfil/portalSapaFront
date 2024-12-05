@@ -43,3 +43,18 @@ export const getTramiteById = async (setLoading: Function, tramiteId: Object, se
     setLoading(false);
   }
 }
+
+export const indexTramites = async (setLoading: Function, params: Object, setData: Function) => {
+  try {
+    setLoading(true);
+    const response = await axiosClient.get("/tramites", { params: { ...params } });
+    setData(response?.data?.data);
+  }
+  catch (e) {
+    throw e;
+  }
+  finally {
+    setLoading(false);
+  }
+}
+

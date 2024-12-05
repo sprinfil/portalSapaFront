@@ -15,6 +15,9 @@ import { Register } from './views/Auth/Register';
 import { VerifyEmail } from './views/Auth/VerifyEmail';
 import { LoginAdmin } from './views/Auth/LoginAdmin';
 import { ResetPassword } from './views/Auth/ResetPassword';
+import { VerFactibilidadAdmin } from './views/Factibilidad/VerFactibilidadAdmin';
+import { RequisitosFactibilidades } from './views/RequisitosFactibilidades/RequisitosFactibilidades';
+import { VerRequisitoFactibilidad } from './views/RequisitosFactibilidades/VerRequisitoFactibilidad';
 
 
 const router = createBrowserRouter([
@@ -47,6 +50,10 @@ const router = createBrowserRouter([
                 element: <VerFactibilidad />
             },
             {
+                path: '/factibilidadDashboard/verFactibilidadAdmin',
+                element: <VerFactibilidadAdmin />
+            },
+            {
                 path: '/Operadores',
                 element: <Operadores />
             },
@@ -57,6 +64,14 @@ const router = createBrowserRouter([
             {
                 path: '/MonitorFactibilidades/VerFactibilidad',
                 element: <VerFactibilidadMonitor />
+            },
+            {
+                path: '/requisitos',
+                element: <RequisitosFactibilidades />
+            },
+            {
+                path: '/verRequisito',
+                element: <VerRequisitoFactibilidad />
             },
         ]
     },

@@ -103,7 +103,7 @@ export function AppSidebar() {
         icon: <FaGear />,
         options: [
           { title: "Operadores", url: "/Operadores", icon: <FaUsers /> },
-          { title: "Requisitos de factibilidades", url: "/", icon: <CiBoxList /> },
+          { title: "Requisitos de factibilidades", url: "/requisitos", icon: <CiBoxList /> },
         ],
       },
     ]
@@ -190,9 +190,9 @@ export function AppSidebar() {
                   className="cursor-pointer"
                   onClick={async () => {
                     try {
-                      await logout(setLogoutLoading);
-                      localStorage.setItem("TOKEN", "");
                       navigate("/login");
+                      localStorage.setItem("TOKEN", "");
+                      // await logout(setLogoutLoading);
                     }
                     catch (e) {
                       toast({
