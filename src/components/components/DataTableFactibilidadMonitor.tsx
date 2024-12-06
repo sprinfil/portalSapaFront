@@ -233,7 +233,6 @@ export function DataTableFactibilidadMonitor() {
           disabled={loading}
           onClick={async () => {
             try {
-              await indexTramites(setLoading, params, setData);
               setParams(
                 {
                   folio: "",
@@ -244,6 +243,7 @@ export function DataTableFactibilidadMonitor() {
                   fecha_solicitud_fin: ""
                 }
               );
+              await indexTramites(setLoading, {}, setData);
             } catch (e) {
               toast({
                 title: "Error",

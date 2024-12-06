@@ -7,7 +7,7 @@ export const indexRequisitosCatalogo = async (setLoading: Function, setData: Fun
     setData(response.data.data);
   }
   catch (e) {
-    throw e ;
+    throw e;
   }
   finally {
     setLoading(false)
@@ -22,7 +22,7 @@ export const storeRequisitoCatalogo = async (setLoading: Function, values: Objec
     return { id };
   }
   catch (e) {
-    throw e ;
+    throw e;
   }
   finally {
     setLoading(false)
@@ -36,7 +36,22 @@ export const getRequisitoCatalogoById = async (setLoading: Function, requisitoId
     setData(response.data.data);
   }
   catch (e) {
-    throw e ;
+    throw e;
+  }
+  finally {
+    setLoading(false)
+  }
+}
+
+export const updateRequisitoCatalogo = async (setLoading: Function, requisitoId: number, values: Object) => {
+  try {
+    setLoading(true);
+    const response = await axiosClient.put("/requisitos/" + requisitoId, values);
+    let newRequisito = response.data.data
+    return { newRequisito };
+  }
+  catch (e) {
+    throw e;
   }
   finally {
     setLoading(false)
