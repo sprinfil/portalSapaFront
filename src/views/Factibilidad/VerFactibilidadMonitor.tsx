@@ -77,7 +77,7 @@ export const VerFactibilidadMonitor = () => {
             </TabsContent>
             <TabsContent value="requisitos">
               <div className='h-full'>
-                <RequisitosFactibilidadTable/>
+                <RequisitosFactibilidadTable tramite={tramite} />
               </div>
             </TabsContent>
           </Tabs>

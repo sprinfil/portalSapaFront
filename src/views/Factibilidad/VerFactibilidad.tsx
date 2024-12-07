@@ -33,6 +33,7 @@ import { getTramiteById } from '@/lib/TramiteService';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@radix-ui/react-toast';
 import { Loader } from '@/components/components/Loader';
+import { RequisitosExtra } from './RequisitosExtra';
 
 export const VerFactibilidad = () => {
   const { toast } = useToast();
@@ -79,12 +80,13 @@ export const VerFactibilidad = () => {
             </BreadcrumbList>
           </Breadcrumb>
         </CardHeader>
-        <CardContent>
+        <CardContent className=''>
           <p className='mb-5'>Factibilidad: SF001</p>
           <Tabs defaultValue="informacionPrincipal" className="">
-            <TabsList className='w-full'>
+            <TabsList className='w-full overflow-auto'>
               <TabsTrigger value="informacionPrincipal">Principal</TabsTrigger>
-              <TabsTrigger value="requisitos">Documentación</TabsTrigger>
+              <TabsTrigger value="requisitos">Requisitos</TabsTrigger>
+              <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
             </TabsList>
             <TabsContent value="informacionPrincipal">
               {
@@ -114,7 +116,12 @@ export const VerFactibilidad = () => {
             </TabsContent>
             <TabsContent value="requisitos">
               <div className='h-full'>
-                <RequisitosFactibilidadTable />
+                <RequisitosFactibilidadTable tramite={tramite} />
+              </div>
+            </TabsContent>
+            <TabsContent value="extras">
+              <div className='h-full'>
+                <RequisitosExtra />
               </div>
             </TabsContent>
           </Tabs>

@@ -10,30 +10,68 @@ import {
 } from "@/components/ui/table"
 import { Button } from "../ui/button"
 import MyDropzone from "./dropzone"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaCheck } from "react-icons/fa";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
+import { getContratoById } from "@/lib/ContratoService";
 
-export function RequisitosFactibilidadTable() {
+export function RequisitosFactibilidadTable({ tramite }) {
   const [archivos, set_archivos] = useState([]);
+  const cellStyles = ""
+  const [requisitos, setRequisitos] = useState(tramite?.contrato?.requisitos);
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
 
-  const cellStyles = "items-center justify-end gap-4 flex"
   return (
     <Table>
       <TableHeader className="bg-muted">
         <TableRow>
           <TableHead className="text-center w-[200px]">Requisito</TableHead>
           <TableHead className="text-center w-[400px]">Documento</TableHead>
+          <TableHead className="text-center w-[400px]">Entregado</TableHead>
           <TableHead className="text-end"><Button>Marcar Documentación lista<FaCheck /></Button></TableHead>
           {/* <TableHead className="text-center">Original</TableHead>
           <TableHead className="text-center">Copia</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
+
+        {
+          requisitos?.map(requisito => {
+
+            const rows = [];
+            rows.push(
+              <TableRow>
+                <TableCell className="items-center text-center bg-muted" rowSpan={requisito?.documentos_rel?.length}>{requisito?.requisito?.nombre}</TableCell>
+                <TableCell className="">{requisito?.documento_rel[0]?.nombre}</TableCell>
+                <TableCell></TableCell>
+                <TableCell className={cellStyles}>
+                  <MyDropzone set={set_archivos} />
+                </TableCell>
+              </TableRow>
+            )
+
+            requisito?.documentos_rel?.map((documento, index) => {
+              if (index != 0) {
+                rows.push(
+                  < TableRow className="">
+                    <TableCell>{documento?.nombre}</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell className={cellStyles}><MyDropzone set={set_archivos} /></TableCell>
+                  </TableRow>
+                )
+              }
+            })
+
+            return rows;
+          })
+        }
+        {/* <TableRow>
           <TableCell className="items-center text-center bg-muted" rowSpan={6}>Acreditar personalidad jurídica</TableCell>
           <TableCell>Identificacion oficial vigente</TableCell>
           <TableCell className={cellStyles}>
-            <MyDropzone set={set_archivos}/>
+            <MyDropzone set={set_archivos} />
           </TableCell>
         </TableRow>
 
@@ -129,9 +167,9 @@ export function RequisitosFactibilidadTable() {
         <TableRow>
           <TableCell>Reglamento autorizado por el H. Ayuntamiento de La Paz</TableCell>
           <TableCell></TableCell>
-        </TableRow>
+        </TableRow> */}
 
       </TableBody>
-    </Table>
+    </Table >
   )
 }

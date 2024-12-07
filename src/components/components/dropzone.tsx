@@ -18,7 +18,7 @@ const MyDropzone = ({ set }) => {
   };
 
   useEffect(() => {
-    set(archivos);
+    // set(archivos);
     console.log(archivos)
   }, [archivos])
 
@@ -32,7 +32,7 @@ const MyDropzone = ({ set }) => {
 
   return (
     <>
-      <div>
+      <div className='my-2'>
         <div {...getRootProps()} style={styles.dropzone}>
           <input {...getInputProps()} />
           {isDragActive ? (
@@ -42,7 +42,9 @@ const MyDropzone = ({ set }) => {
           )}
 
         </div>
-        {
+
+
+        {/* {
           archivos.length > 0 &&
           <>
             <div className='border mt-3'>
@@ -57,7 +59,7 @@ const MyDropzone = ({ set }) => {
               ))}
             </div>
           </>
-        }
+        } */}
       </div>
     </>
   );
@@ -66,7 +68,7 @@ const MyDropzone = ({ set }) => {
 const styles = {
   dropzone: {
     border: '2px dashed #cccccc',
-    padding: '20px',
+    padding: '10px',
     textAlign: 'center',
     cursor: 'pointer',
     borderRadius: '5px'

@@ -33,6 +33,8 @@ import { getTramiteById } from '@/lib/TramiteService';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@radix-ui/react-toast';
 import { Loader } from '@/components/components/Loader';
+import { RequisitosExtra } from './RequisitosExtra';
+import OrdenesTrabajoInspeccion from './OrdenesTrabajoInspeccion';
 
 export const VerFactibilidadAdmin = () => {
   const { toast } = useToast();
@@ -85,6 +87,8 @@ export const VerFactibilidadAdmin = () => {
             <TabsList className='w-full'>
               <TabsTrigger value="informacionPrincipal">Principal</TabsTrigger>
               <TabsTrigger value="requisitos">Documentación</TabsTrigger>
+              <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
+              <TabsTrigger value="ordenes">Ordenes de trabajo</TabsTrigger>
             </TabsList>
             <TabsContent value="informacionPrincipal">
               {
@@ -114,7 +118,17 @@ export const VerFactibilidadAdmin = () => {
             </TabsContent>
             <TabsContent value="requisitos">
               <div className='h-full'>
-                <RequisitosFactibilidadTable />
+                <RequisitosFactibilidadTable tramite={tramite} />
+              </div>
+            </TabsContent>
+            <TabsContent value="extras">
+              <div className='h-full'>
+                <RequisitosExtra />
+              </div>
+            </TabsContent>
+            <TabsContent value="ordenes">
+              <div className='h-full'>
+                <OrdenesTrabajoInspeccion />
               </div>
             </TabsContent>
           </Tabs>
