@@ -18,6 +18,7 @@ import { ResetPassword } from './views/Auth/ResetPassword';
 import { VerFactibilidadAdmin } from './views/Factibilidad/VerFactibilidadAdmin';
 import { RequisitosFactibilidades } from './views/RequisitosFactibilidades/RequisitosFactibilidades';
 import { VerRequisitoFactibilidad } from './views/RequisitosFactibilidades/VerRequisitoFactibilidad';
+import ProbarPDF from './components/components/ProbarPDF';
 
 
 const router = createBrowserRouter([
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
             {
                 path: '/verRequisito',
                 element: <VerRequisitoFactibilidad />
+            },
+            {
+                path: '/probarPdf',
+                element: <ProbarPDF />
             },
         ]
     },

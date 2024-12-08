@@ -34,6 +34,8 @@ import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@radix-ui/react-toast';
 import { Loader } from '@/components/components/Loader';
 import { RequisitosExtra } from './RequisitosExtra';
+import { Button } from '@/components/ui/button';
+import ProbarPDF from '@/components/components/ProbarPDF';
 
 export const VerFactibilidad = () => {
   const { toast } = useToast();
@@ -88,11 +90,15 @@ export const VerFactibilidad = () => {
               <TabsTrigger value="requisitos">Requisitos</TabsTrigger>
               <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
             </TabsList>
-            <TabsContent value="informacionPrincipal">
+            <TabsContent value="informacionPrincipal" className='relative'>
               {
                 loading ? <div className='w-full flex items-center justify-center'><Loader /> </div>
                   :
                   <>
+                    {/* <Button className='absolute right-2' onClick={()=>{navigate("/probarPdf")}}>Descargar Solicitud</Button> */}
+                 
+                      <ProbarPDF tramite={tramite}/>
+                  
                     <p className='font-bold'>Datos de la solicitud</p>
                     <DatosSolicitudForm disabled={true} defaultValues={tramite} />
 

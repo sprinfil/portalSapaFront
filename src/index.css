@@ -81,3 +81,6 @@
   }
 }
   
+.break-page {
+  page-break-after: always; /* O puedes usar page-break-after */
+}

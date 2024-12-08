@@ -27,7 +27,7 @@ import { Textarea } from '../ui/textarea'
 
 
 
-export const FormInspeccionAgua = () => {
+export const FormInspeccionAlcantarillado = () => {
   const rowStyles = "h-[70px] "
   const lat = 24.141633277226045
   const lng = -110.31325855927948
@@ -120,7 +120,7 @@ export const FormInspeccionAgua = () => {
               </TableRow>
 
               <TableRow className={rowStyles}>
-                <TableCell>Toma o preparación</TableCell>
+                <TableCell>Descarga o preparación</TableCell>
                 <TableCell className='flex gap-4 flex-wrap'>
                   <FormField
                     control={form.control}
@@ -164,51 +164,7 @@ export const FormInspeccionAgua = () => {
               </TableRow>
 
               <TableRow className={rowStyles}>
-                <TableCell>Medidor</TableCell>
-                <TableCell className='flex gap-4 flex-wrap'>
-                  <FormField
-                    control={form.control}
-                    name="tipo_de_calle"
-                    render={({ field }) => (
-                      <FormItem className="">
-                        <FormLabel></FormLabel>
-                        <FormControl>
-                          <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                            className="flex flex-col space-y-1"
-                          >
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="si" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                Si
-                              </FormLabel>
-                            </FormItem>
-
-                            <FormItem className="flex items-center space-x-3 space-y-0">
-                              <FormControl>
-                                <RadioGroupItem value="no" />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                No
-                              </FormLabel>
-                            </FormItem>
-
-                          </RadioGroup>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Textarea placeholder='Observaciones' className='md:w-[600px] w-full'></Textarea>
-                </TableCell>
-
-              </TableRow>
-
-              <TableRow className={rowStyles}>
-                <TableCell>Presión menometrica (del punto más cercano)</TableCell>
+                <TableCell>Profundidad de pozo de visita: (del punto más cercano)</TableCell>
                 <TableCell className='gap-4 grid grid-cols-1 md:grid-cols-2'>
                   <Textarea></Textarea>
                   <Textarea placeholder='Observaciones'></Textarea>
