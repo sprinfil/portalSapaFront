@@ -28,8 +28,9 @@ export function RequisitosFactibilidadTable({ tramite }) {
       <TableHeader className="bg-muted">
         <TableRow>
           <TableHead className="text-center w-[200px]">Requisito</TableHead>
+          <TableHead className="text-center w-[400px]"></TableHead>
           <TableHead className="text-center w-[400px]">Documento</TableHead>
-          <TableHead className="text-center w-[400px]">Entregado</TableHead>
+          <TableHead className="text-center w-[400px]">Estado</TableHead>
           <TableHead className="text-end"><Button>Marcar Documentación lista<FaCheck /></Button></TableHead>
           {/* <TableHead className="text-center">Original</TableHead>
           <TableHead className="text-center">Copia</TableHead> */}
@@ -41,24 +42,58 @@ export function RequisitosFactibilidadTable({ tramite }) {
           requisitos?.map(requisito => {
 
             const rows = [];
+            let estadoStyles = "";
+
+            if (requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase() == "ENTREGADO") {
+              estadoStyles = "bg-green-200 p-3 text-gray-700 font-bold";
+            }
+
+            if (requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase() == "PENDIENTE") {
+              estadoStyles = "bg-orange-200 p-3 text-gray-700 font-bold";
+            }
+
             rows.push(
               <TableRow>
-                <TableCell className="items-center text-center bg-muted" rowSpan={requisito?.documentos_rel?.length}>{requisito?.requisito?.nombre}</TableCell>
-                <TableCell className="">{requisito?.documento_rel[0]?.nombre}</TableCell>
-                <TableCell></TableCell>
+                <TableCell className="items-center text-center bg-muted" rowSpan={requisito?.documentos?.length} >{requisito?.nombre}</TableCell>
+                <TableCell className="">{requisito?.documentos[0]?.nombre}</TableCell>
+                <TableCell className="text-center"><Button variant={"link"}>{requisito?.documentos[0]?.entregables[0]?.archivos[0]?.nombre}</Button></TableCell>
+                <TableCell className="text-center">
+                  <p className={estadoStyles}>
+                    {requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase()}
+                  </p>
+
+                </TableCell>
                 <TableCell className={cellStyles}>
-                  <MyDropzone set={set_archivos} />
+                  <MyDropzone set={set_archivos} entregableId={requisito?.documentos[0]?.entregables[0]?.id} />
                 </TableCell>
               </TableRow>
             )
 
-            requisito?.documentos_rel?.map((documento, index) => {
+            requisito?.documentos?.map((documento, index) => {
+
+              let estadoStyles = "";
+
+              if (documento?.entregables[0]?.estado.toUpperCase() == "ENTREGADO") {
+                estadoStyles = "bg-green-200 p-3 text-gray-700 font-bold";
+              }
+
+              if (documento?.entregables[0]?.estado.toUpperCase() == "PENDIENTE") {
+                estadoStyles = "bg-orange-200 p-3 text-gray-700 font-bold";
+              }
+
+
               if (index != 0) {
                 rows.push(
                   < TableRow className="">
                     <TableCell>{documento?.nombre}</TableCell>
-                    <TableCell></TableCell>
-                    <TableCell className={cellStyles}><MyDropzone set={set_archivos} /></TableCell>
+                    <TableCell className="text-center"> <Button variant={"link"}>{documento?.entregables[0]?.archivos[0]?.nombre}</Button> </TableCell>
+                    <TableCell className="text-center">
+                      <p className={estadoStyles}>
+                        {documento?.entregables[0]?.estado.toUpperCase()}
+                      </p>
+
+                    </TableCell>
+                    <TableCell className={cellStyles}><MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} /></TableCell>
                   </TableRow>
                 )
               }
@@ -67,108 +102,6 @@ export function RequisitosFactibilidadTable({ tramite }) {
             return rows;
           })
         }
-        {/* <TableRow>
-          <TableCell className="items-center text-center bg-muted" rowSpan={6}>Acreditar personalidad jurídica</TableCell>
-          <TableCell>Identificacion oficial vigente</TableCell>
-          <TableCell className={cellStyles}>
-            <MyDropzone set={set_archivos} />
-          </TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>CURP reciente</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Constancia de Situación fiscal</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Acta constitutiva</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Carta poder</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Poder notarial</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell className="items-center text-center bg-muted" rowSpan={3}>Acreditar propiedad del predio</TableCell>
-          <TableCell>Escritura o título debidamente inscrito en Registro Público y Catastro</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Certificado de no adeudo predial</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Comprobante de domicilio</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell className="items-center text-center bg-muted" rowSpan={5}>Tomas Comericales e industriales</TableCell>
-          <TableCell>Copia del plano arquitectónico</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Planta de conjunto del local a construir o croquis de distribución local</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Memoria de cálculo hidráulico del proyecto</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Autorización de uso de suelo</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Contrato de arrendamiento (si aplica)</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell className="items-center text-center bg-muted" rowSpan={3}>Viviendas y/o departamentos</TableCell>
-          <TableCell>Copia del plano arquitectónico de la vivienda y/o departamento a construir</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>plano de la subdivisión autorizada</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Oficio de la subdivisión autorizada</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell className="items-center text-center bg-muted" rowSpan={2}>Régimen en condominio</TableCell>
-          <TableCell>Estructura pública protocolizada ante notario público que lo establezca y debidamente registrada ante el Registro Público de la Propiedad y el Comercio</TableCell>
-          <TableCell></TableCell>
-        </TableRow>
-
-        <TableRow>
-          <TableCell>Reglamento autorizado por el H. Ayuntamiento de La Paz</TableCell>
-          <TableCell></TableCell>
-        </TableRow> */}
-
       </TableBody>
     </Table >
   )

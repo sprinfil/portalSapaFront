@@ -1,11 +1,16 @@
+import { useToast } from '@/hooks/use-toast';
+import { subirArchivo } from '@/lib/ArhcivoService';
+import { ToastAction } from '@radix-ui/react-toast';
 import { Trash2Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudArrowUp } from "react-icons/fa6";
 
-const MyDropzone = ({ set }) => {
+const MyDropzone = ({ set, entregableId }) => {
 
   const [archivos, set_archivos] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const { toast } = useToast();
 
   const onDrop = (acceptedFiles) => {
     // Aquí puedes manejar los archivos que fueron soltados
@@ -20,6 +25,20 @@ const MyDropzone = ({ set }) => {
   useEffect(() => {
     // set(archivos);
     console.log(archivos)
+    if (archivos[0]) {
+      try {
+        subirArchivo(setLoading, entregableId, archivos[0]);
+      }
+      catch (e) {
+        toast({
+          title: "Error",
+          description: "Algo salió mal al subir el archivo",
+          variant: "destructive",
+          action: <ToastAction altText='Aceptar'>Aceptar  </ToastAction>
+        })
+      }
+    }
+
   }, [archivos])
 
   const quitar_archivo = (key) => {
@@ -68,7 +87,7 @@ const MyDropzone = ({ set }) => {
 const styles = {
   dropzone: {
     border: '2px dashed #cccccc',
-    padding: '10px',
+    padding: '2px',
     textAlign: 'center',
     cursor: 'pointer',
     borderRadius: '5px'

@@ -24,6 +24,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Textarea } from '../ui/textarea'
+import InspeccionAlcantarilladoPDF from './InspeccionAlcantarilladoPDF'
 
 
 
@@ -59,6 +60,7 @@ export const FormInspeccionAlcantarillado = () => {
         <p>NO SOLICITUD #SI011</p>
         <p>06/12/2024</p>
       </div>
+      <InspeccionAlcantarilladoPDF />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-full ">
 

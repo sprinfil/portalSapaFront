@@ -24,7 +24,8 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Textarea } from '../ui/textarea'
-
+import { BsFilePdfFill } from "react-icons/bs";
+import InspeccionAguaPDF from './InspeccionAguaPDF'
 
 
 export const FormInspeccionAgua = () => {
@@ -55,10 +56,14 @@ export const FormInspeccionAgua = () => {
 
   return (
     <>
-      <div className='flex gap-2 my-2'>
-        <p>NO SOLICITUD #SI011</p>
-        <p>06/12/2024</p>
+      <div className='w-full flex items-center mb-4'>
+        <div className='flex gap-2 my-2'>
+          <p>NO SOLICITUD #SI011</p>
+          <p>06/12/2024</p>
+        </div>
       </div>
+      <InspeccionAguaPDF />
+      
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-full ">
 

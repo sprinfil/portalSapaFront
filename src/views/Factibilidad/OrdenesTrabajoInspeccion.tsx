@@ -13,7 +13,6 @@ const OrdenesTrabajoInspeccion = () => {
     <div>
       {ordenTrabajoId == null ? <DataTableOrdenesTrabajoInspecciones setOrdenTrabajoId={setOrdenTrabajoId} /> :
         <>
-
           <div className='flex gap-2 items-center'>
             <Button
               variant={"outline"}
@@ -27,7 +26,7 @@ const OrdenesTrabajoInspeccion = () => {
           </div>
 
           <FormInspeccionAlcantarillado />
-
+          {/* <FormInspeccionAgua/> */}
         </>
       }
 

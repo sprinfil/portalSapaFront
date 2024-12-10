@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/table"
 import sapaLogo2 from "../../assets/sapalogo2.png"
 import "../../index.css"
+import { BsFilePdfFill } from "react-icons/bs";
 
 const ProbarPDF = ({tramite}) => {
   const pdfRef = useRef();
@@ -88,7 +89,8 @@ const ProbarPDF = ({tramite}) => {
 
   return (
     <>
-      <Button className='absolute right-0' onClick={generatePDF}>Descargar PDF</Button>
+      <Button variant={"destructive"} className='absolute right-0' onClick={generatePDF}>Exportar PDF<BsFilePdfFill /></Button>
+      
       <div className="overflow-hidden h-[0px]">
         <div
           ref={pdfRef}
