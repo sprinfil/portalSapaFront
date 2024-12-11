@@ -5,28 +5,37 @@ import { Button } from '@/components/ui/button';
 import React, { useState } from 'react'
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
-const OrdenesTrabajoInspeccion = () => {
+const OrdenesTrabajoInspeccion = ({ tramite }) => {
 
-  const [ordenTrabajoId, setOrdenTrabajoId] = useState(null);
+  const [ordenTrabajo, setOrdenTrabajo] = useState(null);
+
+
 
   return (
     <div>
-      {ordenTrabajoId == null ? <DataTableOrdenesTrabajoInspecciones setOrdenTrabajoId={setOrdenTrabajoId} /> :
+      {ordenTrabajo == null ? <DataTableOrdenesTrabajoInspecciones setOrdenTrabajo={setOrdenTrabajo} tramite={tramite} /> :
         <>
           <div className='flex gap-2 items-center'>
             <Button
               variant={"outline"}
               onClick={() => {
-                setOrdenTrabajoId(null);
+                setOrdenTrabajo(null);
               }}
             >
               <FaArrowLeft />
               Volver</Button>
-            <p> Orden de Inspeccion de agua 12/12/2024</p>
+            <p> Orden de Inspeccion de {ordenTrabajo?.tipo_inspeccion} {ordenTrabajo?.no_solicitud}</p>
           </div>
-
-          <FormInspeccionAlcantarillado />
-          {/* <FormInspeccionAgua/> */}
+          {
+            ordenTrabajo?.tipo_inspeccion == "agua" ?
+              <>
+                <FormInspeccionAgua inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo} />
+              </>
+              :
+              <>
+                <FormInspeccionAlcantarillado />
+              </>
+          }
         </>
       }
 

@@ -19,6 +19,7 @@ import { VerFactibilidadAdmin } from './views/Factibilidad/VerFactibilidadAdmin'
 import { RequisitosFactibilidades } from './views/RequisitosFactibilidades/RequisitosFactibilidades';
 import { VerRequisitoFactibilidad } from './views/RequisitosFactibilidades/VerRequisitoFactibilidad';
 import ProbarPDF from './components/components/ProbarPDF';
+import { CrearInspeccionAgua } from './views/Factibilidad/CrearInspeccionAgua';
 
 
 const router = createBrowserRouter([

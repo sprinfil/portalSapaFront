@@ -96,7 +96,7 @@ export function DatosSolicitudForm({
                 <RadioGroup
                   disabled={true}
                   onValueChange={field.onChange}
-                  defaultValue={field.value}
+                  defaultValue={field.value?.toString()}
                   className="flex flex-col space-y-1"
                 >
                   <FormItem className="flex items-center space-x-3 space-y-0">
