@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -24,43 +24,116 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { Textarea } from '../ui/textarea'
+import { BsFilePdfFill } from "react-icons/bs";
+import InspeccionAguaPDF from './InspeccionAguaPDF'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useToast } from '@/hooks/use-toast'
+import { ToastAction } from '@radix-ui/react-toast'
+import { updateInspeccionAgua, updateInspeccionAlcantarillado } from '@/lib/InspeccionService'
+import { Loader } from './Loader'
 import InspeccionAlcantarilladoPDF from './InspeccionAlcantarilladoPDF'
 
-
-
-export const FormInspeccionAlcantarillado = () => {
+export const FormInspeccionAlcantarillado = ({ inspeccion, setInspeccion }) => {
+  const { toast } = useToast();
   const rowStyles = "h-[70px] "
+  const [loading, setLoading] = useState(false);
   const lat = 24.141633277226045
   const lng = -110.31325855927948
   const zoom = 18;
   const mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=${zoom}&output=embed`;
 
   const formSchema = z.object({
-    username: z.string().min(2, {
-      message: "Username must be at least 2 characters.",
-    }),
+    red_instalada: z.number().nullable().optional(),
+    red_instalada_observaciones: z.string().optional(),
+    toma_preparacion: z.number().nullable().optional(),
+    toma_preparacion_observaciones: z.string().optional(),
+    medidor: z.number().nullable().optional(),
+    medidor_observaciones: z.string().optional(),
+    presion: z.string().optional(),
+    presion_observaciones: z.string().optional(),
+    descarga_preparacion: z.number().nullable().optional(),
+    descarga_preparacion_observaciones: z.string().optional(),
+    profundidad_preparacion: z.string().optional(),
+    profundidad_preparacion_observaciones: z.string().optional(),
+    tipo_demolicion: z.string().optional(),
+    tipo_demolicion_metros: z.number().nullable().optional(),
+    observaciones_demolicion_metros: z.string().optional(),
+    tipo_suelo: z.string().optional(),
+    tipo_suelo_metros: z.number().nullable().optional(),
+    observaciones_suelo_metros: z.string().optional(),
+
+    profundiad_preparacion: z.string().nullable().optional(),
+    profundiad_preparacion_observaciones: z.string().optional(),
   })
+
+  const sanitizeValues = (obj: Record<string, any>) => {
+    return Object.fromEntries(
+      Object.entries(obj).map(([key, value]) => [key, value ?? ""])
+    );
+  };
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      red_instalada: inspeccion?.red_instalada ?? null,
+      red_instalada_observaciones: inspeccion?.red_instalada_observaciones ?? "",
+      toma_preparacion: inspeccion?.toma_preparacion ?? null,
+      toma_preparacion_observaciones: inspeccion?.toma_preparacion_observaciones ?? "",
+      medidor: inspeccion?.medidor ?? null,
+      medidor_observaciones: inspeccion?.medidor_observaciones ?? "",
+      presion: inspeccion?.presion ?? "",
+      presion_observaciones: inspeccion?.presion_observaciones ?? "",
+      descarga_preparacion: inspeccion?.descarga_preparacion ?? null,
+      descarga_preparacion_observaciones: inspeccion?.descarga_preparacion_observaciones ?? "",
+      profundidad_preparacion: inspeccion?.profundidad_preparacion ?? "",
+      profundidad_preparacion_observaciones: inspeccion?.profundidad_preparacion_observaciones ?? "",
+      tipo_demolicion: inspeccion?.tipo_demolicion ?? "",
+      tipo_demolicion_metros: inspeccion?.tipo_demolicion_metros ?? null,
+      observaciones_demolicion_metros: inspeccion?.observaciones_demolicion_metros ?? "",
+      tipo_suelo: inspeccion?.tipo_suelo ?? "",
+      tipo_suelo_metros: inspeccion?.tipo_suelo_metros ?? null,
+      observaciones_suelo_metros: inspeccion?.observaciones_suelo_metros ?? "",
+      profundiad_preparacion: inspeccion?.profundiad_preparacion ?? "",
+      profundiad_preparacion_observaciones: inspeccion?.profundiad_preparacion_observaciones ?? "",
     },
   })
 
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    // console.log(values)
+    // let valuesTemp = values;
+    // valuesTemp.presion = true;
+    try {
+      await updateInspeccionAlcantarillado(setLoading, values, inspeccion?.id, setInspeccion);
+      toast({
+        title: "Exito",
+        description: "Los cambios se han guardado con éxito",
+        action: <ToastAction altText="Aceptar">Aceptar</ToastAction>,
+      })
+    }
+    catch (e) {
+      toast({
+        title: "Error",
+        description: "Ocurrio un error al modificar la inspeccion",
+        action: <ToastAction altText="Aceotar">Aceptar</ToastAction>,
+        variant: "destructive"
+      })
+    }
   }
 
 
   return (
     <>
-      <div className='flex gap-2 my-2'>
-        <p>NO SOLICITUD #SI011</p>
-        <p>06/12/2024</p>
+      <div className='mt-10'>
+        <InspeccionAlcantarilladoPDF inspeccion={inspeccion} />
       </div>
-      <InspeccionAlcantarilladoPDF />
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-3 w-full ">
 
@@ -83,19 +156,19 @@ export const FormInspeccionAlcantarillado = () => {
                 <TableCell className='flex gap-4 flex-wrap'>
                   <FormField
                     control={form.control}
-                    name="tipo_de_calle"
+                    name="red_instalada"
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel></FormLabel>
                         <FormControl>
                           <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) => field.onChange(Number(value))}
+                            defaultValue={field.value?.toString()}
                             className="flex flex-col space-y-1"
                           >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="si" />
+                                <RadioGroupItem value="1" />
                               </FormControl>
                               <FormLabel className="font-normal">
                                 Si
@@ -104,7 +177,7 @@ export const FormInspeccionAlcantarillado = () => {
 
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="no" />
+                                <RadioGroupItem value="0" />
                               </FormControl>
                               <FormLabel className="font-normal">
                                 No
@@ -117,7 +190,26 @@ export const FormInspeccionAlcantarillado = () => {
                       </FormItem>
                     )}
                   />
-                  <Textarea placeholder='Observaciones' className='md:w-[600px] w-full'></Textarea>
+                  <FormField
+                    control={form.control}
+                    name="red_instalada_observaciones"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Observaciones'
+                            className='md:w-[600px] w-full'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </TableCell>
               </TableRow>
 
@@ -126,19 +218,19 @@ export const FormInspeccionAlcantarillado = () => {
                 <TableCell className='flex gap-4 flex-wrap'>
                   <FormField
                     control={form.control}
-                    name="tipo_de_calle"
+                    name="descarga_preparacion"
                     render={({ field }) => (
                       <FormItem className="">
                         <FormLabel></FormLabel>
                         <FormControl>
                           <RadioGroup
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            onValueChange={(value) => field.onChange(Number(value))}
+                            defaultValue={field.value?.toString()}
                             className="flex flex-col space-y-1"
                           >
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="si" />
+                                <RadioGroupItem value="1" />
                               </FormControl>
                               <FormLabel className="font-normal">
                                 Si
@@ -147,7 +239,7 @@ export const FormInspeccionAlcantarillado = () => {
 
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="no" />
+                                <RadioGroupItem value="0" />
                               </FormControl>
                               <FormLabel className="font-normal">
                                 No
@@ -160,16 +252,71 @@ export const FormInspeccionAlcantarillado = () => {
                       </FormItem>
                     )}
                   />
-                  <Textarea placeholder='Observaciones' className='md:w-[600px] w-full'></Textarea>
+                  <FormField
+                    control={form.control}
+                    name="descarga_preparacion_observaciones"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Observaciones'
+                            className='md:w-[600px] w-full'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </TableCell>
 
               </TableRow>
 
               <TableRow className={rowStyles}>
-                <TableCell>Profundidad de pozo de visita: (del punto más cercano)</TableCell>
+                <TableCell>Profunidad de pozo de visita (del punto más cercano)</TableCell>
                 <TableCell className='gap-4 grid grid-cols-1 md:grid-cols-2'>
-                  <Textarea></Textarea>
-                  <Textarea placeholder='Observaciones'></Textarea>
+                  <FormField
+                    control={form.control}
+                    name="profundiad_preparacion"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Profundidad de pozo'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="profundiad_preparacion_observaciones"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Observaciones'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </TableCell>
               </TableRow>
 
@@ -185,11 +332,36 @@ export const FormInspeccionAlcantarillado = () => {
 
             <TableHeader>
               <TableRow>
-                <TableHead className='min-w-[100px] w-[150px]'>Demolición</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>Asfalto</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>Concreto</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>Empedrado</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>Terreno natural</TableHead>
+                <TableCell className='min-w-[100px] w-[150px]'>Demolición</TableCell>
+                <TableCell className=' min-w-[120px] w-[150px]' colSpan={4} >
+                  <FormField
+                    control={form.control}
+                    name="tipo_demolicion"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona un tipo" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {/* <SelectItem value="demolicion">Demolición</SelectItem> */}
+                            <SelectItem value="asfalto">Asfalto</SelectItem>
+                            <SelectItem value="concreto">Concreto</SelectItem>
+                            <SelectItem value="empedrado">Empedrado</SelectItem>
+                            <SelectItem value="terrenoNatural">Terreno natural</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TableCell>
               </TableRow>
             </TableHeader>
 
@@ -197,41 +369,149 @@ export const FormInspeccionAlcantarillado = () => {
             <TableBody>
               <TableRow>
                 <TableCell>Distancias:</TableCell>
+                <TableCell colSpan={4}>
+                  <FormField
+                    control={form.control}
+                    name="tipo_demolicion_metros"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="MTRS."
+                            {...field}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              field.onChange(value === "" ? "" : Number(value));
+                            }}
+                            value={field.value || ""}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TableCell>
+                {/* <TableCell><Input placeholder='MTRS.'></Input></TableCell>
                 <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-                <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-                <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-                <TableCell><Input placeholder='MTRS.'></Input></TableCell>
+                <TableCell><Input placeholder='MTRS.'></Input></TableCell> */}
               </TableRow>
               <TableRow>
                 <TableCell>Observaciones / Materiales:</TableCell>
                 <TableCell colSpan={4}>
-                  <Textarea placeholder='Observaciones'></Textarea>
+                  <FormField
+                    control={form.control}
+                    name="observaciones_demolicion_metros"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder='Observaciones'
+                            className=' w-full'
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </TableCell>
               </TableRow>
             </TableBody>
 
             <TableHeader>
               <TableRow>
-                <TableHead className=' min-w-[120px] w-[150px]'>Evaluación tipo de suelo</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>A</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>B</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>C</TableHead>
-                <TableHead className=' min-w-[120px] w-[150px]'>D</TableHead>
+                <TableCell className=' min-w-[120px] w-[150px]'>Evaluación tipo de suelo</TableCell>
+                <TableCell className=' min-w-[120px] w-[150px]' colSpan={4}>
+                  <FormField
+                    control={form.control}
+                    name="tipo_suelo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel></FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Selecciona un tipo" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="A">A</SelectItem>
+                            <SelectItem value="B">B</SelectItem>
+                            <SelectItem value="C">C</SelectItem>
+                            <SelectItem value="D">D</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TableCell>
               </TableRow>
             </TableHeader>
 
             <TableRow>
               <TableCell>Profundidad</TableCell>
-              <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-              <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-              <TableCell><Input placeholder='MTRS.'></Input></TableCell>
-              <TableCell><Input placeholder='MTRS.'></Input></TableCell>
+              <TableCell>
+                <FormField
+                  control={form.control}
+                  name="tipo_suelo_metros"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel></FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="MTRS."
+                          {...field}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            field.onChange(value === "" ? "" : Number(value)); // Si está vacío, establece una cadena vacía
+                          }}
+                          value={field.value || ""} // Asegura que el valor sea una cadena vacía si está undefined
+                        />
+                      </FormControl>
+                      <FormDescription>
+
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                /></TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Observaciones / Materiales:</TableCell>
               <TableCell colSpan={4}>
-                <Textarea placeholder='Observaciones'></Textarea>
+                <FormField
+                  control={form.control}
+                  name="observaciones_suelo_metros"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel></FormLabel>
+                      <FormControl>
+                        <Textarea
+                          placeholder='Observaciones'
+                          className=' w-full'
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>
+
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </TableCell>
             </TableRow>
           </Table>
@@ -262,7 +542,12 @@ export const FormInspeccionAlcantarillado = () => {
             </TableBody>
           </Table>
 
-          <Button type="submit">Aceptar y guardar</Button>
+          <Button type="submit"
+            disabled={loading}
+          >
+            {loading && <Loader />}
+            Aceptar y guardar
+          </Button>
 
         </form>
       </Form>

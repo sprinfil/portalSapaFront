@@ -15,6 +15,10 @@ import { FaCheck } from "react-icons/fa";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { getContratoById } from "@/lib/ContratoService";
+import ZustandPrincipal from "@/Zustand/ZustandPrincipal";
+import { useNavigate } from "react-router-dom";
+import { ModalVerArchivo } from "./ModalVerArchivo";
+import { ModalRechazarEntregable } from "./ModalRechazarEntregable";
 
 export function RequisitosFactibilidadTable({ tramite }) {
   const [archivos, set_archivos] = useState([]);
@@ -22,6 +26,8 @@ export function RequisitosFactibilidadTable({ tramite }) {
   const [requisitos, setRequisitos] = useState(tramite?.contrato?.requisitos);
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const { user } = ZustandPrincipal();
+  const navigate = useNavigate();
 
   return (
     <Table>
@@ -29,9 +35,21 @@ export function RequisitosFactibilidadTable({ tramite }) {
         <TableRow>
           <TableHead className="text-center w-[200px]">Requisito</TableHead>
           <TableHead className="text-center w-[400px]"></TableHead>
-          <TableHead className="text-center w-[400px]">Documento</TableHead>
+          <TableHead className="text-center w-[400px]"></TableHead>
+          <TableHead className="text-center w-[400px]"></TableHead>
           <TableHead className="text-center w-[400px]">Estado</TableHead>
-          <TableHead className="text-end"><Button>Marcar Documentación lista<FaCheck /></Button></TableHead>
+          <TableHead className="text-end">
+            {
+              user?.roles[0]?.name == "public" ?
+                <>
+                </>
+                :
+                <>
+                  <Button>Marcar Documentación lista<FaCheck /></Button>
+                </>
+            }
+
+          </TableHead>
           {/* <TableHead className="text-center">Original</TableHead>
           <TableHead className="text-center">Copia</TableHead> */}
         </TableRow>
@@ -39,7 +57,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
       <TableBody>
 
         {
-          requisitos?.map(requisito => {
+          requisitos?.map((requisito, index) => {
 
             const rows = [];
             let estadoStyles = "";
@@ -52,20 +70,42 @@ export function RequisitosFactibilidadTable({ tramite }) {
               estadoStyles = "bg-orange-200 p-3 text-gray-700 font-bold";
             }
 
+            
+            if (requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase() == "RECHAZADO") {
+              estadoStyles = "bg-red-300 p-3 text-gray-700 font-bold";
+            }
+
             rows.push(
-              <TableRow>
+              <TableRow key={index}>
                 <TableCell className="items-center text-center bg-muted" rowSpan={requisito?.documentos?.length} >{requisito?.nombre}</TableCell>
                 <TableCell className="">{requisito?.documentos[0]?.nombre}</TableCell>
-                <TableCell className="text-center"><Button variant={"link"}>{requisito?.documentos[0]?.entregables[0]?.archivos[0]?.nombre}</Button></TableCell>
+                <TableCell className="text-center">
+
+                  <ModalVerArchivo
+                    nombre={requisito?.documentos[0]?.entregables[0]?.archivos[0]?.nombre}
+                    url={requisito?.documentos[0]?.entregables[0]?.archivos[0]?.url}
+                  />
+                </TableCell>
+                <TableCell className={cellStyles}>
+                  {
+                    user?.roles[0]?.name == "public" ?
+                      <>
+                        <MyDropzone set={set_archivos} entregableId={requisito?.documentos[0]?.entregables[0]?.id} setRequisitos={setRequisitos} />
+                      </> :
+                      <>
+                        {
+                          requisito?.documentos[0]?.entregables[0]?.estado == "entregado" && <ModalRechazarEntregable setRequisitos={setRequisitos} entregableId={requisito?.documentos[0]?.entregables[0]?.id} />
+                        }
+                      </>
+                  }
+                </TableCell>
+
                 <TableCell className="text-center">
                   <p className={estadoStyles}>
                     {requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase()}
                   </p>
+                </TableCell>
 
-                </TableCell>
-                <TableCell className={cellStyles}>
-                  <MyDropzone set={set_archivos} entregableId={requisito?.documentos[0]?.entregables[0]?.id} />
-                </TableCell>
               </TableRow>
             )
 
@@ -81,19 +121,40 @@ export function RequisitosFactibilidadTable({ tramite }) {
                 estadoStyles = "bg-orange-200 p-3 text-gray-700 font-bold";
               }
 
+              if (documento?.entregables[0]?.estado.toUpperCase() == "RECHAZADO") {
+                estadoStyles = "bg-red-300 p-3 text-gray-700 font-bold";
+              }
+
 
               if (index != 0) {
                 rows.push(
-                  < TableRow className="">
+                  < TableRow className="" key={index}>
                     <TableCell>{documento?.nombre}</TableCell>
-                    <TableCell className="text-center"> <Button variant={"link"}>{documento?.entregables[0]?.archivos[0]?.nombre}</Button> </TableCell>
+                    <TableCell className="text-center">
+                      <ModalVerArchivo
+                        nombre={documento?.entregables[0]?.archivos[0]?.nombre}
+                        url={documento?.entregables[0]?.archivos[0]?.url}
+                      />
+                    </TableCell>
+                    <TableCell className={cellStyles}>
+                      {
+                        user?.roles[0]?.name == "public" ?
+                          <>
+                            <MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />
+                          </> :
+                          <>
+                            {
+                              documento?.entregables[0]?.estado == "entregado" && <ModalRechazarEntregable setRequisitos={setRequisitos} entregableId={documento?.entregables[0]?.id} />
+                            }
+                          </>
+                      }
+                    </TableCell>
+
                     <TableCell className="text-center">
                       <p className={estadoStyles}>
                         {documento?.entregables[0]?.estado.toUpperCase()}
                       </p>
-
                     </TableCell>
-                    <TableCell className={cellStyles}><MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} /></TableCell>
                   </TableRow>
                 )
               }

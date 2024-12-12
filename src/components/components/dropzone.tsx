@@ -5,8 +5,9 @@ import { Trash2Icon } from 'lucide-react';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { FaCloudArrowUp } from "react-icons/fa6";
+import { Loader } from './Loader';
 
-const MyDropzone = ({ set, entregableId }) => {
+const MyDropzone = ({ set, entregableId, setRequisitos }) => {
 
   const [archivos, set_archivos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -24,10 +25,30 @@ const MyDropzone = ({ set, entregableId }) => {
 
   useEffect(() => {
     // set(archivos);
-    console.log(archivos)
+    // console.log(archivos)
+    subir_archivo();
+  }, [archivos])
+
+  const subir_archivo = async () => {
     if (archivos[0]) {
       try {
-        subirArchivo(setLoading, entregableId, archivos[0]);
+        const { data } = await subirArchivo(setLoading, entregableId, archivos[0]);
+
+        setRequisitos(prev => {
+          return prev?.map(requisito => ({
+            ...requisito,
+            documentos: requisito.documentos?.map(documento => ({
+              ...documento,
+              entregables: documento.entregables?.map(entregable => {
+                if (entregable.id === entregableId) {
+                  return data;
+                }
+                return entregable;
+              })
+            }))
+          }));
+        });
+
       }
       catch (e) {
         toast({
@@ -38,8 +59,7 @@ const MyDropzone = ({ set, entregableId }) => {
         })
       }
     }
-
-  }, [archivos])
+  }
 
   const quitar_archivo = (key) => {
 
@@ -51,16 +71,25 @@ const MyDropzone = ({ set, entregableId }) => {
 
   return (
     <>
-      <div className='my-2'>
-        <div {...getRootProps()} style={styles.dropzone}>
-          <input {...getInputProps()} />
-          {isDragActive ? (
-            <p>Suelta los archivos aquí ...</p>
-          ) : (
-            <p>Arrastra y suelta los archivos aquí, o haz clic para seleccionar archivos</p>
-          )}
+      <div className='my-2 min-w-[200px]'>
+        {
+          loading ?
+            <>
+              <Loader />
+            </>
+            :
+            <>
+              <div {...getRootProps()} style={styles.dropzone}>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <p className='py-4'>Suelta el archivo aquí ...</p>
+                ) : (
+                  <p className='py-4'>Sube el archivo aqui</p>
+                )}
 
-        </div>
+              </div>
+            </>
+        }
 
 
         {/* {

@@ -32,7 +32,7 @@ import ayuntamiento from "../../assets/ayuntamiento.png"
 import "../../index.css"
 import { BsFilePdfFill } from "react-icons/bs";
 
-const InspeccionAlcantarilladoPDF = ({ tramite }) => {
+const InspeccionAlcantarilladoPDF = ({ inspeccion }) => {
   const pdfRef = useRef();
   const generatePDF = () => {
     const element = pdfRef.current;
@@ -92,7 +92,7 @@ const InspeccionAlcantarilladoPDF = ({ tramite }) => {
     <>
       <Button className='mb-5' variant={"destructive"} onClick={generatePDF}>Exportar PDF<BsFilePdfFill /></Button>
 
-      <div className="h-0 overflow-hidden">
+      <div className="overflow-hidden h-0">
         <div
           ref={pdfRef}
           style={{
@@ -131,43 +131,43 @@ const InspeccionAlcantarilladoPDF = ({ tramite }) => {
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">No. Solicitud</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border w-[200px]">S001</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border w-[200px]">{inspeccion?.no_solicitud}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Fecha</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">09/12/2024</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.fecha}</td>
 
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Nombre / Razón social</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">MIKE</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.nombre_razon_social}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-right font-bold">Número de teléfono</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-rightx]">6241002296</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-rightx]">{inspeccion?.telefono}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Ubicación</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">AAA</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.ubicacion}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-right font-bold">Trámite</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">AA</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.no_solicitud}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Colonia / Localidad</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">AA</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.colonia_localidad}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-right font-bold">Giro</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">AA</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.giro}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Clave catastral</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">123123</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.clave_catastral}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-right font-bold">Coordenadas de ubicación</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">SDFASsd fsdf sd fsdfffffffffffsd fsdf sdfsdsdfsdfsdfsdfsfdsdfsdfsdfsdf</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.coordenadas}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Sector No.</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">12</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.sector_no}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-center bg-blue-100" colSpan={3}>RED DE AGUA POTABLE</td>
             </tr>
           </table>
@@ -188,22 +188,22 @@ const InspeccionAlcantarilladoPDF = ({ tramite }) => {
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[180px]">RED HIDRÁULICA INSTALADA Y AUTORIZADA FRENTE AL PERDIO</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">●</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">OBSERVACIONES</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">{inspeccion?.red_instalada == 1 && "●"}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">{inspeccion?.red_instalada == 0 && "●"}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">{inspeccion?.red_instalada_observaciones}</td>
             </tr>
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[180px]">DESCARGA O PREPARACIÓN</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">●</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">OBSERVACIONES</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">{inspeccion?.descarga_preparacion == 1 && "●"}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]">{inspeccion?.descarga_preparacion == 0 && "●"}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">{inspeccion?.descarga_preparacion_observaciones}</td>
             </tr>
 
             <tr>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[180px]">PROFUNDIDAD DE POZO DE VISITA: (DEL PUNTO MÁS CERCANO)</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]" colSpan={2}></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">OBSERVACIONES</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[180px]">PROFUNDIDAD DE POZO DE VISITA <span>(DEL PUNTO MÁS CERCANO)</span></td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]" colSpan={2}>{inspeccion?.presion}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">{inspeccion?.presion_observaciones}</td>
             </tr>
           </table>
 
@@ -220,14 +220,14 @@ const InspeccionAlcantarilladoPDF = ({ tramite }) => {
             </tr>
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">DISTANCIAS:</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_demolicion == "asfalto" && inspeccion?.tipo_demolicion_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_demolicion == "concreto" && inspeccion?.tipo_demolicion_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_demolicion == "empedrado" && inspeccion?.tipo_demolicion_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_demolicion == "terrenoNatural" && inspeccion?.tipo_demolicion_metros}</td>
             </tr>
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center h-[70px]">OBSERVACIONES / MATERIALES</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center" colSpan={5}></td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center" colSpan={5}>{inspeccion?.observaciones_demolicion_metros}</td>
             </tr>
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center font-bold">EXCAVACIÓN TIPO DE SUELO</td>
@@ -238,14 +238,14 @@ const InspeccionAlcantarilladoPDF = ({ tramite }) => {
             </tr>
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">PROFUNDIDAD:</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center"></td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_suelo == "A" && inspeccion?.tipo_suelo_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_suelo == "B" && inspeccion?.tipo_suelo_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_suelo == "C" && inspeccion?.tipo_suelo_metros}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center">{inspeccion?.tipo_suelo == "D" && inspeccion?.tipo_suelo_metros}</td>
             </tr>
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center h-[70px]">OBSERVACIONES / MATERIALES</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center" colSpan={5}></td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center" colSpan={5}>{inspeccion?.observaciones_suelo_metros}</td>
             </tr>
           </table>
 

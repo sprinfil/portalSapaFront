@@ -404,7 +404,7 @@ export const FormInspeccionAgua = ({ inspeccion, setInspeccion }) => {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="demolicion">Demolición</SelectItem>
+                            {/* <SelectItem value="demolicion">Demolición</SelectItem> */}
                             <SelectItem value="asfalto">Asfalto</SelectItem>
                             <SelectItem value="concreto">Concreto</SelectItem>
                             <SelectItem value="empedrado">Empedrado</SelectItem>

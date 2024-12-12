@@ -59,3 +59,23 @@ export const updateInspeccionAgua = async (
     setLoading(false);
   }
 }
+
+export const updateInspeccionAlcantarillado = async (
+  setLoading: Function,
+  params: Object,
+  idInspeccion: number,
+  setInspeccion: Function
+) => {
+  try {
+    setLoading(true);
+    const response = await axiosClient.put("/inspecciones/alcantarillado/" + idInspeccion, params);
+    let data = response.data.data;
+    setInspeccion(data);
+  }
+  catch (e) {
+    throw e;
+  }
+  finally {
+    setLoading(false);
+  }
+}

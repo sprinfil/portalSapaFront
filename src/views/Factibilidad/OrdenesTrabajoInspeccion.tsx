@@ -33,7 +33,7 @@ const OrdenesTrabajoInspeccion = ({ tramite }) => {
               </>
               :
               <>
-                <FormInspeccionAlcantarillado />
+                <FormInspeccionAlcantarillado inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo}/>
               </>
           }
         </>

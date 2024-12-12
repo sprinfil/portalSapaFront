@@ -107,6 +107,13 @@ export function DataTableOrdenesTrabajoInspecciones({ setOrdenTrabajo, tramite }
       // ),
     },
     {
+      accessorKey: "estado",
+      header: "Estado",
+      // cell: ({ row }) => (
+      //   <div className="capitalize">{row.getValue("status")}</div>
+      // ),
+    },
+    {
       id: "actions",
       enableHiding: false,
       cell: ({ row }) => {
@@ -148,14 +155,14 @@ export function DataTableOrdenesTrabajoInspecciones({ setOrdenTrabajo, tramite }
   return (
     <div className="w-full">
       <div className="flex flex-wrap items-center py-4 gap-4">
-        <Input
+        {/* <Input
           placeholder="Filter emails..."
           value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("email")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
-        />
+        /> */}
         <div className="flex gap-3 items-center md:ml-auto">
           <Button onClick={() => {
             try {
@@ -178,7 +185,26 @@ export function DataTableOrdenesTrabajoInspecciones({ setOrdenTrabajo, tramite }
           }} disabled={loading} className="">
             Crear Inspección de Agua<PlusCircle />
           </Button>
-          <Button className="">
+
+          <Button onClick={() => {
+            try {
+              storeInspeccion(setLoading,
+                {
+                  id_tramite: tramite?.id,
+                  tipo_inspeccion: "alcantarillado",
+                  sector_no: 1,
+                },
+                setData
+              )
+            } catch (e) {
+              toast({
+                title: "Error",
+                description: "Ocurrió un error creando la inspección",
+                action: <ToastAction altText="Aceptar">Aceptar</ToastAction>,
+                variant: "destructive",
+              })
+            }
+          }} disabled={loading} className="">
             Crear Inspección de Alcantarillado<PlusCircle />
           </Button>
         </div>

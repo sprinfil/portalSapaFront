@@ -83,59 +83,60 @@ export const VerFactibilidad = () => {
           </Breadcrumb>
         </CardHeader>
         <CardContent className=''>
-          <p className='mb-5'>Factibilidad: SF001</p>
-          <Tabs defaultValue="informacionPrincipal" className="">
-            <TabsList className='w-full overflow-auto'>
-              <TabsTrigger value="informacionPrincipal">Principal</TabsTrigger>
-              <TabsTrigger value="requisitos">Requisitos</TabsTrigger>
-              <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
-            </TabsList>
-            <TabsContent value="informacionPrincipal" className='relative'>
-              {
-                loading ? <div className='w-full flex items-center justify-center'><Loader /> </div>
-                  :
-                  <>
-                    {/* <Button className='absolute right-2' onClick={()=>{navigate("/probarPdf")}}>Descargar Solicitud</Button> */}
-                 
-                      <ProbarPDF tramite={tramite}/>
-                  
-                    <p className='font-bold'>Datos de la solicitud</p>
-                    <DatosSolicitudForm disabled={true} defaultValues={tramite} />
+          {loading ? <div className='w-full flex items-center justify-center'><Loader /> </div> :
+            <>
+              <p className='mb-5'>Factibilidad: SF001</p>
+              <Tabs defaultValue="informacionPrincipal" className="">
+                <TabsList className='w-full overflow-auto'>
+                  <TabsTrigger value="informacionPrincipal">Principal</TabsTrigger>
+                  <TabsTrigger value="requisitos">Requisitos</TabsTrigger>
+                  <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
+                </TabsList>
+                <TabsContent value="informacionPrincipal" className='relative'>
 
-                    <p className='font-bold mt-10'>Datos del propietario</p>
-                    <DatosPropietarioForm disabled={true} defaultValues={tramite} />
+                  <ProbarPDF tramite={tramite} />
 
-                    <p className='font-bold mt-10'>Apoderado legal o representante personal</p>
-                    <DatosApoderadoForm disabled={true} defaultValues={tramite} />
+                  <p className='font-bold'>Datos de la solicitud</p>
+                  <DatosSolicitudForm disabled={true} defaultValues={tramite} />
 
-                    <p className='font-bold mt-10'>Datos del autorizado para oir y recibir notificaciones</p>
-                    <DatosAutorizadoForm disabled={true} defaultValues={tramite} />
+                  <p className='font-bold mt-10'>Datos del propietario</p>
+                  <DatosPropietarioForm disabled={true} defaultValues={tramite} />
 
-                    <p className='font-bold mt-10'>Datos básicos del predio</p>
-                    <DatosPredioForm disabled={true} defaultValues={tramite} />
+                  <p className='font-bold mt-10'>Apoderado legal o representante personal</p>
+                  <DatosApoderadoForm disabled={true} defaultValues={tramite} />
 
-                    <p className='font-bold mt-10'>Datos adicionales</p>
-                    <DatosAdicionalesForm disabled={true} defaultValues={tramite} />
-                  </>
-              }
+                  <p className='font-bold mt-10'>Datos del autorizado para oir y recibir notificaciones</p>
+                  <DatosAutorizadoForm disabled={true} defaultValues={tramite} />
 
-            </TabsContent>
-            <TabsContent value="requisitos">
-              <div className='h-full'>
-                <RequisitosFactibilidadTable tramite={tramite} />
-              </div>
-            </TabsContent>
-            <TabsContent value="extras">
-              <div className='h-full'>
-                <RequisitosExtra />
-              </div>
-            </TabsContent>
-          </Tabs>
+                  <p className='font-bold mt-10'>Datos básicos del predio</p>
+                  <DatosPredioForm disabled={true} defaultValues={tramite} />
+
+                  <p className='font-bold mt-10'>Datos adicionales</p>
+                  <DatosAdicionalesForm disabled={true} defaultValues={tramite} />
+
+                </TabsContent>
+                <TabsContent value="requisitos">
+                  <div className='h-full'>
+                    {
+                      loading ? <Loader /> :
+                        <>
+                          <RequisitosFactibilidadTable tramite={tramite} />
+                        </>
+                    }
+                  </div>
+                </TabsContent>
+                <TabsContent value="extras">
+                  <div className='h-full'>
+                    <RequisitosExtra tramiteId={tramiteId} />
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </>
+          }
           <div>
-
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 }
