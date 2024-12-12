@@ -20,16 +20,22 @@ import { RequisitosFactibilidades } from './views/RequisitosFactibilidades/Requi
 import { VerRequisitoFactibilidad } from './views/RequisitosFactibilidades/VerRequisitoFactibilidad';
 import ProbarPDF from './components/components/ProbarPDF';
 import { CrearInspeccionAgua } from './views/Factibilidad/CrearInspeccionAgua';
+import { ErrorComponent } from './components/components/ErrorComponent';
 
 
 const router = createBrowserRouter([
     {
         path: '/',
         element: <DefaultLayout />,
+        // errorElement: <ErrorComponent />,
         children: [
             {
                 path: '/',
                 element: <Navigate to="/dashboard" />
+            },
+            {
+                path: '/error',
+                element: <ErrorComponent />
             },
             {
                 path: '/dashboard',

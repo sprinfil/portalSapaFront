@@ -147,7 +147,12 @@ export const RequisitosExtra = ({ tramiteId, tramite }) => {
                             <TableCell>
                               {user?.roles[0]?.name == "public" && <MyDropzone entregableId={entregable?.id} setEntregables={setEntregables} />}
 
-                              <ModalVerArchivo nombre={entregable?.archivos[0]?.nombre} url={entregable?.archivos[0]?.url} />
+                              {entregable?.archivos?.[0] && (
+                                <ModalVerArchivo
+                                  nombre={entregable.archivos[0].nombre}
+                                  url={entregable.archivos[0].url}
+                                />
+                              )}
 
                             </TableCell>
                           </TableRow>
