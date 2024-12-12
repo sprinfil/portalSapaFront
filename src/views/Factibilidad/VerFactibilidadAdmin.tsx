@@ -123,7 +123,7 @@ export const VerFactibilidadAdmin = () => {
             </TabsContent>
             <TabsContent value="extras">
               <div className='h-full'>
-                <RequisitosExtra tramiteId={tramiteId}/>
+                <RequisitosExtra tramiteId={tramiteId} tramite={tramite} />
               </div>
             </TabsContent>
             <TabsContent value="ordenes">

@@ -7,7 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { FaCloudArrowUp } from "react-icons/fa6";
 import { Loader } from './Loader';
 
-const MyDropzone = ({ set, entregableId, setRequisitos }) => {
+const MyDropzone = ({ set, entregableId, setRequisitos, setEntregables }) => {
 
   const [archivos, set_archivos] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,20 +34,35 @@ const MyDropzone = ({ set, entregableId, setRequisitos }) => {
       try {
         const { data } = await subirArchivo(setLoading, entregableId, archivos[0]);
 
-        setRequisitos(prev => {
-          return prev?.map(requisito => ({
-            ...requisito,
-            documentos: requisito.documentos?.map(documento => ({
-              ...documento,
-              entregables: documento.entregables?.map(entregable => {
-                if (entregable.id === entregableId) {
-                  return data;
-                }
-                return entregable;
-              })
-            }))
-          }));
-        });
+        if (setRequisitos) {
+          setRequisitos(prev => {
+            return prev?.map(requisito => ({
+              ...requisito,
+              documentos: requisito.documentos?.map(documento => ({
+                ...documento,
+                entregables: documento.entregables?.map(entregable => {
+                  if (entregable.id === entregableId) {
+                    return data;
+                  }
+                  return entregable;
+                })
+              }))
+            }));
+          });
+        }
+
+        if (setEntregables) {
+          setEntregables(prev => {
+            return prev?.map(entregable => {
+              if (entregable?.id == entregableId) {
+                return data
+              } else {
+                return entregable
+              }
+            })
+          })
+        }
+
 
       }
       catch (e) {

@@ -39,14 +39,14 @@ import { updateInspeccionAgua, updateInspeccionAlcantarillado } from '@/lib/Insp
 import { Loader } from './Loader'
 import InspeccionAlcantarilladoPDF from './InspeccionAlcantarilladoPDF'
 
-export const FormInspeccionAlcantarillado = ({ inspeccion, setInspeccion }) => {
+export const FormInspeccionAlcantarillado = ({ inspeccion, setInspeccion, tramite }) => {
   const { toast } = useToast();
   const rowStyles = "h-[70px] "
   const [loading, setLoading] = useState(false);
   const lat = 24.141633277226045
   const lng = -110.31325855927948
   const zoom = 18;
-  const mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=${zoom}&output=embed`;
+  const mapUrl = `https://maps.google.com/maps?q=${tramite?.posicion?.coordinates[1]},${tramite?.posicion?.coordinates[0]}&z=${15}&output=embed`;
 
   const formSchema = z.object({
     red_instalada: z.number().nullable().optional(),

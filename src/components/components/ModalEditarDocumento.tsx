@@ -144,8 +144,8 @@ export function ModalEditarDocumento({ setRequisito, documento }) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="pdf">PDF</SelectItem>
-                      <SelectItem value="imagen">Imagen</SelectItem>
+                      <SelectItem value="Archivo">Archivo</SelectItem>
+                      <SelectItem value="Text">Texto</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />

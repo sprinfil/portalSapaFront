@@ -29,11 +29,11 @@ const OrdenesTrabajoInspeccion = ({ tramite }) => {
           {
             ordenTrabajo?.tipo_inspeccion == "agua" ?
               <>
-                <FormInspeccionAgua inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo} />
+                <FormInspeccionAgua tramite={tramite}  inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo} />
               </>
               :
               <>
-                <FormInspeccionAlcantarillado inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo}/>
+                <FormInspeccionAlcantarillado tramite={tramite} inspeccion={ordenTrabajo} setInspeccion={setOrdenTrabajo}/>
               </>
           }
         </>

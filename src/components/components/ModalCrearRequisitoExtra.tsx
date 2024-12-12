@@ -51,7 +51,7 @@ const formSchema = z.object({
 })
 
 
-export function ModalCrearRequisitoExtra({ tramiteId }) {
+export function ModalCrearRequisitoExtra({ tramiteId, setEntregables }) {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
   const buttonCancelarRef = useRef();
@@ -71,7 +71,7 @@ export function ModalCrearRequisitoExtra({ tramiteId }) {
     };
     console.log(valuesTemp)
     try {
-      await storeEntregable(setLoading, valuesTemp);
+      await storeEntregable(setLoading, valuesTemp, setEntregables);
       buttonCancelarRef.current.click();
     } catch (e) {
       toast({
@@ -107,7 +107,7 @@ export function ModalCrearRequisitoExtra({ tramiteId }) {
                 <FormItem>
                   <FormLabel>Requisito extra</FormLabel>
                   <FormControl>
-                    <Input placeholder="Nombre" {...field} />
+                    <Input placeholder="Requisito" {...field} />
                   </FormControl>
                   <FormDescription>
 
@@ -130,8 +130,9 @@ export function ModalCrearRequisitoExtra({ tramiteId }) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="texto">Texto</SelectItem>
-                      <SelectItem value="archivo">Archivo</SelectItem>
+                      <SelectItem value="Text">Texto</SelectItem>
+                      <SelectItem value="Archivo">Archivo</SelectItem>
+                      {/* <SelectItem value="Point">Mapa</SelectItem> */}
                     </SelectContent>
                   </Select>
                   <FormDescription>

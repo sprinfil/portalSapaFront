@@ -19,6 +19,8 @@ import ZustandPrincipal from "@/Zustand/ZustandPrincipal";
 import { useNavigate } from "react-router-dom";
 import { ModalVerArchivo } from "./ModalVerArchivo";
 import { ModalRechazarEntregable } from "./ModalRechazarEntregable";
+import { SiGooglemaps } from "react-icons/si";
+import { ModalEstablecerUbicacion } from "./ModalEstablecerUbicacion";
 
 export function RequisitosFactibilidadTable({ tramite }) {
   const [archivos, set_archivos] = useState([]);
@@ -70,7 +72,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
               estadoStyles = "bg-orange-200 p-3 text-gray-700 font-bold";
             }
 
-            
+
             if (requisito?.documentos[0]?.entregables[0]?.estado?.toUpperCase() == "RECHAZADO") {
               estadoStyles = "bg-red-300 p-3 text-gray-700 font-bold";
             }
@@ -140,7 +142,9 @@ export function RequisitosFactibilidadTable({ tramite }) {
                       {
                         user?.roles[0]?.name == "public" ?
                           <>
-                            <MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />
+                            {documento?.tipo == "Archivo" && <MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />}
+                            {documento?.tipo == "Point" && <ModalEstablecerUbicacion entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />}
+
                           </> :
                           <>
                             {
@@ -148,6 +152,15 @@ export function RequisitosFactibilidadTable({ tramite }) {
                             }
                           </>
                       }
+                      {documento?.tipo == "Point" && <>
+                        <iframe
+                          width="100%"
+                          height="450"
+                          style={{ border: 0 }}
+                          loading="lazy"
+                          allowFullScreen
+                          src={`https://maps.google.com/maps?q=${tramite?.posicion?.coordinates[1]},${tramite?.posicion?.coordinates[0]}&z=${15}&output=embed`}
+                        /></>}
                     </TableCell>
 
                     <TableCell className="text-center">

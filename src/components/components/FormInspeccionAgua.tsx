@@ -38,14 +38,14 @@ import { ToastAction } from '@radix-ui/react-toast'
 import { updateInspeccionAgua } from '@/lib/InspeccionService'
 import { Loader } from './Loader'
 
-export const FormInspeccionAgua = ({ inspeccion, setInspeccion }) => {
+export const FormInspeccionAgua = ({ inspeccion, setInspeccion, tramite }) => {
   const { toast } = useToast();
   const rowStyles = "h-[70px] "
   const [loading, setLoading] = useState(false);
   const lat = 24.141633277226045
   const lng = -110.31325855927948
   const zoom = 18;
-  const mapUrl = `https://maps.google.com/maps?q=${lat},${lng}&z=${zoom}&output=embed`;
+  const mapUrl = `https://maps.google.com/maps?q=${tramite?.posicion?.coordinates[1]},${tramite?.posicion?.coordinates[0]}&z=${15}&output=embed`;
 
   const formSchema = z.object({
     red_instalada: z.number().nullable().optional(),

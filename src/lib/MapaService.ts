@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { Loader } from '@googlemaps/js-api-loader';
-import valvulaCaja from '../assets/cajaValvula.png'
-import celularImg from '../assets/celular.png';
+
 
 export const mapContainerStyle = {
   width: "100%",
@@ -10,7 +9,7 @@ export const mapContainerStyle = {
 
 export const StylesRecorridosMap = {
   width: "100%",
-  height: "92vh",
+  height: "70vh",
 };
 
 
@@ -22,6 +21,29 @@ export const center = {
 export const parseCoordinates = (polygonData) => {
   return polygonData.polygon.coordinates[0].map(([lng, lat]) => ({ lat, lng }));
 };
+
+export const initMapaDefault = async (existingMap = null, setMap: Function) => {
+
+  const loader = new Loader({
+    apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
+    version: 'weekly',
+  });
+
+  let map;
+
+  if (!existingMap) {
+    await loader.load();
+    map = new window.google.maps.Map(document.getElementById("map"), {
+      center: center,
+      zoom: 14,
+    });
+    setMap(map);
+  } else {
+    map = existingMap;
+  }
+}
+
+
 
 
 export const initMapa = async (predios, valvulas, setSelectedPredio, existingMap = null, setMap, setCoordinates, setPolygons) => {
@@ -228,26 +250,44 @@ export const initMapaValvulas = async (valvulas, existingMap = null, setMap, set
   addMarkers();
 };
 
-export const initMapaRecorridos = async (existingMap = null, setMap: Function) => {
-
+export const initMapaEscogerUbicacion = async (existingMap = null, setMap: Function, setCoordinates: Function) => {
   const loader = new Loader({
     apiKey: import.meta.env.VITE_GOOGLE_API_KEY,
     version: 'weekly',
   });
 
   let map;
+  let marker;
 
   if (!existingMap) {
     await loader.load();
     map = new window.google.maps.Map(document.getElementById("map"), {
-      center: center,
+      center: center, 
       zoom: 14,
     });
     setMap(map);
   } else {
     map = existingMap;
   }
-}
+
+  map.addListener("click", (event) => {
+    const clickedLatLng = event.latLng;
+
+    if (marker) {
+      marker.setPosition(clickedLatLng);
+    } else {
+      marker = new window.google.maps.Marker({
+        position: clickedLatLng,
+        map: map,
+      });
+    }
+
+    setCoordinates({
+      lat: clickedLatLng.lat(),
+      lng: clickedLatLng.lng(),
+    });
+  });
+};
 
 export const showRecorrido = async (map, bitacoras, setValvulasMarkers, valvulasMarkers, recorridoLine, setRecorridoLine, capturasMarkers, setCapturasMarkers) => {
   if (map) {
