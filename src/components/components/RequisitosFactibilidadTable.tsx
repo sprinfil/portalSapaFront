@@ -155,7 +155,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
                       {documento?.tipo == "Point" && <>
                         <iframe
                           width="100%"
-                          height="450"
+                          height="150"
                           style={{ border: 0 }}
                           loading="lazy"
                           allowFullScreen
