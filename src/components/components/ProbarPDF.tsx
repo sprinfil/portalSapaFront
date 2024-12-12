@@ -132,7 +132,7 @@ const ProbarPDF = ({tramite}) => {
 
             <tr className="">
               <td className="px-4 py-2 text-sm text-gray-800 border-b font-bold text-right">Contrato solicitado</td>
-              <td className="px-4 py-2 text-sm text-gray-800 border-b " colSpan={5}>{tramite?.contrato_nombre}</td>
+              <td className="px-4 py-2 text-sm text-gray-800 border-b " colSpan={5}>{tramite?.contrato?.nombre}</td>
             </tr>
 
             <tr className="">

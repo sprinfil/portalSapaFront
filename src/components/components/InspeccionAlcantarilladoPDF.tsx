@@ -32,7 +32,7 @@ import ayuntamiento from "../../assets/ayuntamiento.png"
 import "../../index.css"
 import { BsFilePdfFill } from "react-icons/bs";
 
-const InspeccionAlcantarilladoPDF = ({ inspeccion }) => {
+const InspeccionAlcantarilladoPDF = ({ inspeccion, tramite }) => {
   const pdfRef = useRef();
   const generatePDF = () => {
     const element = pdfRef.current;
@@ -148,7 +148,7 @@ const InspeccionAlcantarilladoPDF = ({ inspeccion }) => {
               <td className="px-4 py-2 items-center text-sm text-gray-800 border font-bold text-right">Ubicación</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.ubicacion}</td>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-right font-bold">Trámite</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{inspeccion?.no_solicitud}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border">{tramite?.folio}</td>
             </tr>
 
             <tr>
@@ -202,8 +202,8 @@ const InspeccionAlcantarilladoPDF = ({ inspeccion }) => {
 
             <tr>
               <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[180px]">PROFUNDIDAD DE POZO DE VISITA <span>(DEL PUNTO MÁS CERCANO)</span></td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]" colSpan={2}>{inspeccion?.presion}</td>
-              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">{inspeccion?.presion_observaciones}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[80px]" colSpan={2}>{inspeccion?.profundiad_preparacion}</td>
+              <td className="px-4 py-2 items-center text-sm text-gray-800 border text-center w-[510px]">{inspeccion?.profundiad_preparacion_observaciones}</td>
             </tr>
           </table>
 

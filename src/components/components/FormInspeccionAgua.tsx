@@ -125,7 +125,7 @@ export const FormInspeccionAgua = ({ inspeccion, setInspeccion, tramite }) => {
   return (
     <>
       <div className='mt-10'>
-        <InspeccionAguaPDF inspeccion={inspeccion} />
+        <InspeccionAguaPDF inspeccion={inspeccion} tramite={tramite} />
       </div>
 
       <Form {...form}>

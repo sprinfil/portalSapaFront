@@ -131,7 +131,7 @@ export const FormInspeccionAlcantarillado = ({ inspeccion, setInspeccion, tramit
   return (
     <>
       <div className='mt-10'>
-        <InspeccionAlcantarilladoPDF inspeccion={inspeccion} />
+        <InspeccionAlcantarilladoPDF inspeccion={inspeccion} tramite={tramite} />
       </div>
 
       <Form {...form}>
