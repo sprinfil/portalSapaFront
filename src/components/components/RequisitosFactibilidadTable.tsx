@@ -30,6 +30,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
   const [loading, setLoading] = useState(false);
   const { user } = ZustandPrincipal();
   const navigate = useNavigate();
+  const [coordinates, setCoordinates] = useState({})
 
   return (
     <Table>
@@ -143,7 +144,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
                         user?.roles[0]?.name == "public" ?
                           <>
                             {documento?.tipo == "Archivo" && <MyDropzone set={set_archivos} entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />}
-                            {documento?.tipo == "Point" && <ModalEstablecerUbicacion entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} />}
+                            {documento?.tipo == "Point" && <ModalEstablecerUbicacion entregableId={documento?.entregables[0]?.id} setRequisitos={setRequisitos} coordinates={coordinates} setCoordinates={setCoordinates} />}
 
                           </> :
                           <>

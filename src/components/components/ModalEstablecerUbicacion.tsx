@@ -16,12 +16,12 @@ import { SiGooglemaps } from "react-icons/si";
 import { Loader } from "./Loader";
 import { patchEntregable } from "@/lib/EntregableService";
 
-export function ModalEstablecerUbicacion({ entregableId, setRequisitos }) {
+export function ModalEstablecerUbicacion({ entregableId, setRequisitos, coordinates, setCoordinates }) {
   const [map, setMap] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false); // Señal para saber si el modal está abierto
   const mapRef = useRef(null);
   const [loadingMap, setLoadingMap] = useState(false)
-  const [coordinates, setCoordinates] = useState({})
+
   const [loadingPatch, setLoadingPatch] = useState(false);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export function ModalEstablecerUbicacion({ entregableId, setRequisitos }) {
             <Button
               onClick={async () => {
                 try {
-                  const {data} = await patchEntregable(setLoadingMap,
+                  const { data } = await patchEntregable(setLoadingMap,
                     {
                       ubicacion: {
                         lat: coordinates?.lat,
