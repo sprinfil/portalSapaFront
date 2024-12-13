@@ -42,7 +42,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
           <TableHead className="text-center w-[400px]"></TableHead>
           <TableHead className="text-center w-[400px]">Estado</TableHead>
           <TableHead className="text-end">
-            {
+            {/* {
               user?.roles[0]?.name == "public" ?
                 <>
                 </>
@@ -50,7 +50,7 @@ export function RequisitosFactibilidadTable({ tramite }) {
                 <>
                   <Button>Marcar Documentación lista<FaCheck /></Button>
                 </>
-            }
+            } */}
 
           </TableHead>
           {/* <TableHead className="text-center">Original</TableHead>

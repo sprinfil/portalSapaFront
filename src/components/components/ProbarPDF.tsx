@@ -89,7 +89,7 @@ const ProbarPDF = ({tramite}) => {
 
   return (
     <>
-      <Button variant={"destructive"} className='absolute right-0' onClick={generatePDF}>Exportar PDF<BsFilePdfFill /></Button>
+      <Button variant={"destructive"} className='my-5' onClick={generatePDF}>Exportar PDF<BsFilePdfFill /></Button>
       
       <div className="overflow-hidden h-[0px]">
         <div

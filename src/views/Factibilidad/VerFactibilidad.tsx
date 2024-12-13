@@ -36,6 +36,7 @@ import { Loader } from '@/components/components/Loader';
 import { RequisitosExtra } from './RequisitosExtra';
 import { Button } from '@/components/ui/button';
 import ProbarPDF from '@/components/components/ProbarPDF';
+import { EtapaProgressComponent } from '@/components/components/EtapaProgressComponent';
 
 export const VerFactibilidad = () => {
   const { toast } = useToast();
@@ -66,6 +67,23 @@ export const VerFactibilidad = () => {
     fetch();
   }, [])
 
+  let porcentaje = 0;
+  if (tramite?.etapa == "solicitud_factibilidad") {
+    porcentaje = 0;
+  }
+  if (tramite?.etapa == "solicitud_inspeccion") {
+    porcentaje = 50;
+  }
+  if (tramite?.etapa == "inspeccion") {
+    porcentaje = 100;
+  }
+  if (tramite?.etapa == "analisis" || tramite?.etapa == "proyectos") {
+    porcentaje = 150;
+  }
+  if (tramite?.etapa == "analisis" && tramite?.estado == "aprobada") {
+    porcentaje = 200;
+  }
+
   return (
     <div className='h-full w-full'>
       <Card className='h-full'>
@@ -85,7 +103,7 @@ export const VerFactibilidad = () => {
         <CardContent className=''>
           {loading ? <div className='w-full flex items-center justify-center'><Loader /> </div> :
             <>
-              <p className='mb-5'>Factibilidad: SF001</p>
+         
               <Tabs defaultValue="informacionPrincipal" className="">
                 <TabsList className='w-full overflow-auto'>
                   <TabsTrigger value="informacionPrincipal">Principal</TabsTrigger>
@@ -93,9 +111,8 @@ export const VerFactibilidad = () => {
                   <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
                 </TabsList>
                 <TabsContent value="informacionPrincipal" className='relative'>
-
+                  <EtapaProgressComponent porcentaje={porcentaje} />
                   <ProbarPDF tramite={tramite} />
-
                   <p className='font-bold'>Datos de la solicitud</p>
                   <DatosSolicitudForm disabled={true} defaultValues={tramite} />
 

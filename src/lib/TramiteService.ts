@@ -58,3 +58,23 @@ export const indexTramites = async (setLoading: Function, params: Object, setDat
   }
 }
 
+export const patchTramite = async (setLoading: Function, values: Object, tramiteId: number, setTramite: Function) => {
+  try {
+    setLoading(true);
+    const response = await axiosClient.patch("/tramites/" + tramiteId, values);
+    // setData(response?.data?.data);
+    setTramite(prev => {
+      return {
+        ...prev,
+        ...response?.data?.data
+      }
+    })
+  }
+  catch (e) {
+    throw e;
+  }
+  finally {
+    setLoading(false);
+  }
+}
+

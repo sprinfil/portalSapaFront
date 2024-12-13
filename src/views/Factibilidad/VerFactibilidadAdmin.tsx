@@ -29,12 +29,19 @@ import { DatosAutorizadoForm } from '@/components/components/DatosAutorizadoForm
 import { DatosApoderadoForm } from '@/components/components/DatosApoderadoForm';
 import { DatosAdicionalesForm } from '@/components/components/DatosAdicionalesForm';
 import { RequisitosFactibilidadTable } from '@/components/components/RequisitosFactibilidadTable';
-import { getTramiteById } from '@/lib/TramiteService';
+import { getTramiteById, patchTramite } from '@/lib/TramiteService';
 import { useToast } from '@/hooks/use-toast';
 import { ToastAction } from '@radix-ui/react-toast';
 import { Loader } from '@/components/components/Loader';
 import { RequisitosExtra } from './RequisitosExtra';
 import OrdenesTrabajoInspeccion from './OrdenesTrabajoInspeccion';
+import { Button } from '@/components/ui/button';
+import { FaCheck } from 'react-icons/fa';
+import { ArrowRight } from 'lucide-react';
+import ZustandPrincipal from '@/Zustand/ZustandPrincipal';
+import { EtapasComponent } from '@/components/components/EtapasComponent';
+import { Progress } from "@/components/ui/progress"
+import { EtapaProgressComponent } from '@/components/components/EtapaProgressComponent';
 
 export const VerFactibilidadAdmin = () => {
   const { toast } = useToast();
@@ -42,10 +49,11 @@ export const VerFactibilidadAdmin = () => {
   const formTitleStyles = ""
   const [tramite, setTramite] = useState({});
   const [loading, setLoading] = useState(false);
+  const [loadingPatchTramite, setLoadingPatchTramite] = useState(false);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const tramiteId = queryParams.get('tramiteId');
-
+  const { user } = ZustandPrincipal();
 
   const fetch = async () => {
     try {
@@ -64,6 +72,23 @@ export const VerFactibilidadAdmin = () => {
   useEffect(() => {
     fetch();
   }, [])
+
+  let porcentaje = 0;
+  if (tramite?.etapa == "solicitud_factibilidad") {
+    porcentaje = 0;
+  }
+  if (tramite?.etapa == "solicitud_inspeccion") {
+    porcentaje = 50;
+  }
+  if (tramite?.etapa == "inspeccion") {
+    porcentaje = 100;
+  }
+  if (tramite?.etapa == "analisis" || tramite?.etapa == "proyectos") {
+    porcentaje = 150;
+  }
+  if (tramite?.etapa == "analisis" && tramite?.estado == "aprobada") {
+    porcentaje = 200;
+  }
 
   return (
     <div className='h-full w-full'>
@@ -90,11 +115,14 @@ export const VerFactibilidadAdmin = () => {
               <TabsTrigger value="extras">Requisitos extras</TabsTrigger>
               <TabsTrigger value="ordenes">Ordenes de trabajo</TabsTrigger>
             </TabsList>
-            <TabsContent value="informacionPrincipal">
+            <TabsContent value="informacionPrincipal" className='relative'>
               {
                 loading ? <div className='w-full flex items-center justify-center'><Loader /> </div>
                   :
                   <>
+                    <EtapaProgressComponent porcentaje={porcentaje} />
+                    <EtapasComponent tramite={tramite} setLoadingPatchTramite={setLoadingPatchTramite} setTramite={setTramite} />
+
                     <p className='font-bold'>Datos de la solicitud</p>
                     <DatosSolicitudForm disabled={true} defaultValues={tramite} />
 
@@ -137,6 +165,6 @@ export const VerFactibilidadAdmin = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div >
   )
 }

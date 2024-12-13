@@ -19,18 +19,30 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import ZustandPrincipal from '@/Zustand/ZustandPrincipal';
 import { ModalSolicitudPendiente } from '@/components/components/ModalSolicitudPendiente';
 import { Button } from '@/components/ui/button';
+import { getContratos } from '@/lib/ContratoService';
+import { useToast } from '@/hooks/use-toast';
 
 export const CrearFactibilidad = () => {
   const navigate = useNavigate();
+  const toast = useToast()
   const { tramite, setTramite, user } = ZustandPrincipal();
   const ButtonTriggerModal = useRef();
   const [openModal, setOpenModal] = useState(false);
+  const [contratos, setContratos] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (tramite?.id_contrato != null && tramite?.id_solicitante == user?.id) {
       setOpenModal(true);
     }
+    try {
+      getContratos(setLoading, setContratos);
+    } catch (e) {
+
+    }
+
   }, [])
+
 
   return (
     <Card className='h-full'>
@@ -50,7 +62,7 @@ export const CrearFactibilidad = () => {
       </CardHeader>
       <CardContent>
         <ModalSolicitudPendiente open={openModal} setOpen={setOpenModal} />
-        
+
         <p>Seleccione el tipo de contrato</p>
         <div className='grid md:grid-cols-2 grid-cols-1 mt-4 gap-4'>
           <Card onClick={() => navigate("/factibilidadFormulario?idContrato=1")} className='h-[600px] overflow-auto cursor-pointer hover:bg-muted transition-all duration-200'>
